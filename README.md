@@ -1,16 +1,48 @@
-# modisch
+# SOP Kerja dengan Git
 
-A new Flutter project.
+## Alur Kerja Git
 
-## Getting Started
+### 1. Clone Repository
+```bash
+git clone https://github.com/Modisch-PENS/modisch-mobile.git
+```
+Secara default, perintah ini akan mengclone branch development.
 
-This project is a starting point for a Flutter application.
+### 2. Buat Branch Baru
+Buatlah branch baru sesuai dengan fitur/modul yang akan dikerjakan:
+```bash
+git checkout -b nama_branch
+```
+Penamaan branch sebaiknya deskriptif sesuai dengan fitur yang dikerjakan.
 
-A few resources to get you started if this is your first Flutter project:
+### 3. Commit Perubahan
+Setelah melakukan perubahan, lakukan commit dengan langkah berikut:
+```bash
+git add .
+git commit -m "deskripsi singkat apa yang telah dibuat"
+git push origin nama_branch
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Jangan malas untuk melakukan commit! Lebih baik sering commit dalam ukuran kecil daripada jarang commit dalam ukuran besar.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 4. Membuat Pull Request
+Setelah fitur selesai dikembangkan:
+1. Buka github.com
+2. Buat Pull Request dari branch kamu ke branch development (sudah default)
+3. Tambahkan reviewer: **mrrizzz**
+4. Berikan deskripsi yang jelas tentang perubahan yang dibuat
+
+### 5. Kebijakan Pull Request
+- Pull Request ke branch development hanya dilakukan jika fitur sudah selesai
+- Sebelum membuat Pull Request, konfirmasi di grup wa dengan tag PO
+
+### 6. Struktur Branch
+- **Branch development**: Branch default selama proses pengembangan
+- **Branch main**: Branch untuk production yang hanya diupdate setelah sprint selesai
+
+## Catatan Penting
+- Lakukan commit secara teratur
+- Usahakan commit message jelas dan deskriptif
+- Selalu pull branch development terbaru sebelum membuat branch baru
+
+## Semangat Coding! 💻🚀
