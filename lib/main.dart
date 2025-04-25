@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:modisch/constants/typography.dart';
-
+import 'constants/typography.dart';
 import 'constants/colors.dart';
+import 'presentation/pages/home_page.dart';
+import 'presentation/pages/wardrobe_page.dart';
+import 'presentation/pages/model_page.dart';
+import 'presentation/pages/make_model_page.dart';
+import 'presentation/pages/add_clothes_page.dart';
+import 'presentation/widgets/expanding_fab.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ModischApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ModischApp extends StatelessWidget {
+  const ModischApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Modisch',
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.light(
@@ -25,31 +30,38 @@ class MyApp extends StatelessWidget {
         ),
         textTheme: AppTypography.getM3TextTheme(),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MyHomePage(),
+        '/home': (context) => const HomePage(),
+        '/wardrobe': (context) => const WardrobePage(),
+        '/model': (context) => const ModelPage(),
+        '/add_clothes': (context) => const AddClothesPage(),
+        '/add_model': (context) => const MakeModelPage(),
+      },
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  int _currentIndex = 0;
 
-  void _incrementCounter() {
+  final List<Widget> _pages = [
+    const HomePage(),
+    const WardrobePage(),
+    ModelPage(),
+  ];
+
+  void _onTap(int index) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _currentIndex = index;
     });
   }
 
@@ -58,32 +70,34 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(
-          widget.title,
-          style: AppTypography.pageTitle, // Use your page title style
-        ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-              style: AppTypography.buttonLabel, // Use your body text style
-            ),
-            Text(
-              '$_counter',
-              style: AppTypography.pageTitle, // Use appropriate style
-            ),
-          ],
-        ),
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _pages,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-        backgroundColor: AppColors.tertiary,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: _onTap,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        selectedItemColor: AppColors.tertiary,
+        unselectedItemColor: AppColors.secondary,
+        items: const [
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.house),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.toiletPortable),
+            label: 'Wardrobe',
+          ),
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.shirt),
+            label: 'Model',
+          ),
+        ],
       ),
+      floatingActionButton: const ExpandingFab(),
     );
   }
 }
