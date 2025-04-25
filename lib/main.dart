@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:modisch/constants/typography.dart';
-
-import 'constants/colors.dart';
+import 'package:modisch/core/constants/typography.dart';
+import 'core/constants/colors.dart';
 
 void main() {
   runApp(const MyApp());

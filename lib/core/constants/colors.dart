@@ -1,4 +1,4 @@
-// lib/constants/colors/app_colors.dart
+// lib/core/constants/colors/app_colors.dart
 import 'package:flutter/material.dart';
 
 class AppColors {

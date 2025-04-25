@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:modisch/constants/colors.dart';
+import 'package:modisch/core/constants/colors.dart';
 
 class AppTypography {
   static TextTheme getM3TextTheme([TextTheme? base]){
