@@ -7,6 +7,7 @@ import 'presentation/pages/model_page.dart';
 import 'presentation/pages/make_model_page.dart';
 import 'presentation/pages/add_clothes_page.dart';
 import 'presentation/widgets/expanding_fab.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() {
@@ -37,8 +38,9 @@ class ModischApp extends StatelessWidget {
         '/wardrobe': (context) => const WardrobePage(),
         '/model': (context) => const ModelPage(),
         '/add_clothes': (context) => const AddClothesPage(),
-        '/add_model': (context) => const MakeModelPage(),
+        '/make_model': (context) => const MakeModelPage(),
       },
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -97,7 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      floatingActionButton: const ExpandingFab(),
+      floatingActionButtonLocation: ExpandableFab.location,
+      floatingActionButton: const CustomExpandableFab(),
     );
   }
 }
