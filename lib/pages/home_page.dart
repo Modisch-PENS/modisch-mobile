@@ -34,57 +34,45 @@ class _HomePageState extends State<HomePage> {
         ]
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(24),
-              child: Column(
+        child: Padding(
+          padding: EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color:AppColors.disabled,
+                      color: AppColors.disabled,
                       borderRadius: BorderRadius.circular(28),
                     ),
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: 'Himit Outfit',
-                        hintStyle: TextStyle(
-                          color: AppColors.secondary, 
-                        ),
+                        hintStyle: TextStyle(color: AppColors.secondary),
                         border: InputBorder.none,
-                        prefixIcon: Icon(
-                          Icons.menu,
-                          color: AppColors.secondary,
-                        ),
-                        suffixIcon: Icon(
-                          Icons.search,
-                          color: AppColors.secondary,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(vertical: 14)
+                        prefixIcon: Icon(Icons.menu, color: AppColors.secondary),
+                        suffixIcon: Icon(Icons.search, color: AppColors.secondary),
+                        contentPadding: EdgeInsets.symmetric(vertical: 14),
                       ),
-                    ), 
-                  )
+                    ),
+                  ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 18),
-              child: Container(
+              SizedBox(height: 24), 
+              Container(
                 color: AppColors.disabled,
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
                     Expanded(
-                      flex: 1,
                       child: Text(
                         'DECIDE WHAT\nYOU WANNA\nWEAR TODAY!',
-                        style: AppTypography.pageTitle(context)
+                        style: AppTypography.inputTextPlaceholder(context),
                       ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
-                      flex: 1,
                       child: Image.asset(
                         'assets/clothes/shirt/shirt_jaslab.png',
                         height: MediaQuery.of(context).size.width * 0.4,
@@ -94,48 +82,24 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                'Recent Model',
-                style: AppTypography.buttonLabel(context)
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: buildShortcutButton()
-            ),      
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: Text(
+              SizedBox(height: 24),
+              Text(
                 'Recent Clothes',
-                style: AppTypography.buttonLabel(context)
+                style: AppTypography.buttonLabel(context),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: buildShortcutButton()
-            ),
-          ],
+              SizedBox(height: 16),
+              buildShortcutButton(),
+              SizedBox(height: 24),
+              Text(
+                'Recent Clothes',
+                style: AppTypography.buttonLabel(context),
+              ),
+              SizedBox(height: 16),
+              buildShortcutButton(),
+            ],
+          ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-      currentIndex: _currentIndex,
-      selectedItemColor: AppColors.tertiary, // warna item aktif
-      unselectedItemColor: AppColors.disabled, // warna item tidak aktif
-      onTap: (index) {
-        setState(() {
-          _currentIndex = index;
-        });
-      },
-      items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
-        BottomNavigationBarItem(icon: Icon(Icons.search), label: ''),
-        BottomNavigationBarItem(icon: Icon(Icons.library_music), label: ''),
-      ],
-    ),
-
     );
   }
 
