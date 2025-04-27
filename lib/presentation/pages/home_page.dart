@@ -3,6 +3,7 @@ import '../../constants/typography.dart';
 import '../../constants/colors.dart';
 import 'package:modisch/presentation/pages/wardrobe_page.dart';
 import 'package:modisch/presentation/pages/model_page.dart';
+import 'package:modisch/presentation/widgets/wardrobe_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,6 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -19,18 +21,20 @@ class _HomePageState extends State<HomePage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Modisch'),
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          toolbarHeight: 0,
           bottom: const TabBar(
             tabs: [
-              Tab(text: 'Recent Wardrobe'),
-              Tab(text: 'Recent Model'),
+              Tab(text: 'Recent Wardrobe'), 
+              Tab(text: 'Recent Model')
             ],
           ),
         ),
-        body: TabBarView(
+        body: Column(
           children: [
-            WardrobePage(),
-            ModelPage(),
+            const Expanded(
+              child: TabBarView(children: [WardrobePage(), ModelPage()]),
+            ),
           ],
         ),
       ),

@@ -30,7 +30,7 @@ class CustomExpandableFab extends StatelessWidget {
       ),
       overlayStyle: ExpandableFabOverlayStyle(
         blur: 5.0, // Blur effect strength
-        color: Colors.white.withOpacity(0.5),
+        color: Colors.white.withValues(alpha:0.5),
       ),
       children: [
         SizedBox(
@@ -41,7 +41,7 @@ class CustomExpandableFab extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(50),
             ),
-            onPressed: () => Navigator.pushNamed(context, '/add_clothes'),
+            onPressed: () => Navigator.pushNamed(context, '/image_picker'),
             icon: const FaIcon(FontAwesomeIcons.camera, size: 16, color: AppColors.secondary),
             label: Text('Add Clothes', style: AppTypography.cardLabel),
           ),

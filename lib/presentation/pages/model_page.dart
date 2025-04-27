@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:modisch/presentation/widgets/model_card.dart';
+import 'package:modisch/presentation/widgets/model_card.dart';
+import '../../constants/colors.dart';
 
 class ModelPage extends StatefulWidget {
   const ModelPage({super.key});
@@ -13,12 +16,12 @@ class _ModelPage extends State<ModelPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Model Page'),
+        backgroundColor: AppColors.background,
       ),
-      body: Center(
-        child: Text(
-          'Welcome to the Model Page!',
-          style: TextStyle(fontSize: 20),
-        ),
+      backgroundColor: AppColors.background,
+      body: Container(
+        color: AppColors.background,
+        child: const ModelCard(),
       ),
     );
   }
