@@ -7,7 +7,7 @@ class SearchBarComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 24, right: 24, bottom: 24),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       child: SearchBar(
         leading: Icon(
           Icons.menu,
