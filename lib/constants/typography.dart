@@ -31,6 +31,10 @@ class AppTypography {
     return getM3TextTheme(Theme.of(context).textTheme).bodyLarge!;
   }
 
+  static TextStyle recentInfoLabel(BuildContext context) {
+    return getM3TextTheme(Theme.of(context).textTheme).bodyLarge!;
+  }
+
   /// Returns the text style for button labels.
   static TextStyle buttonLabel(BuildContext context) {
     return getM3TextTheme(

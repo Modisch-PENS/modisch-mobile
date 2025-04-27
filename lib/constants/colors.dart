@@ -24,5 +24,5 @@ class AppColors {
   static const Color disabled = Color(0xFFD9D9D9);
 
   /// A color for components within the SearchBar.
-  static const Color searchBarComponents = Color(0xFFD9D9D9);
+  static const Color searchBarComponents = Color(0xFF79747E);
 }
