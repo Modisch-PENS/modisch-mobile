@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../constants/typography.dart';
+import '../../constants/colors.dart';
 
 class MakeModelPage extends StatefulWidget {
   const MakeModelPage({super.key});

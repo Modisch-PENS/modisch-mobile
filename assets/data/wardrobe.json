@@ -1,0 +1,184 @@
+{
+    "WardrobeItems":[
+    {
+      "id": 1,
+      "name": "Beige Shirt",
+      "type": "shirt",
+      "imageUrl": "assets/clothes/shirt/shirt_beige.webp"
+    },
+    {
+      "id": 2,
+      "name": "Black Shirt",
+      "type": "shirt",
+      "imageUrl": "assets/clothes/shirt/shirt_black.webp"
+    },
+    {
+      "id": 3,
+      "name": "Black Plain Shirt",
+      "type": "shirt",
+      "imageUrl": "assets/clothes/shirt/shirt_blackplain.png"
+    },
+    {
+      "id": 4,
+      "name": "Jaslab",
+      "type": "shirt",
+      "imageUrl": "assets/clothes/shirt/shirt_laslab.png"
+    },
+    {
+      "id": 5,
+      "name": "Lightblue Shirt",
+      "type": "shirt",
+      "imageUrl": "assets/clothes/shirt/shirt_lightblue.png"
+    },
+    {
+      "id": 6,
+      "name": "Plaid Shirt",
+      "type": "shirt",
+      "imageUrl": "assets/clothes/shirt/shirt_plaid.webp"
+    },
+    {
+      "id": 7,
+      "name": "White Shirt",
+      "type": "shirt",
+      "imageUrl": "assets/clothes/shirt/shirt_white.png"
+    },
+    {
+      "id": 8,
+      "name": "White Plain Shirt",
+      "type": "shirt",
+      "imageUrl": "assets/clothes/shirt/shirt_whiteplain.png"
+    },
+    {
+      "id": 9,
+      "name": "Beige Pants",
+      "type": "pants",
+      "imageUrl": "assets/clothes/pants/pants_beige.webp"
+    },
+    {
+      "id": 10,
+      "name": "Black Jeans Pants",
+      "type": "pants",
+      "imageUrl": "assets/clothes/pants/pants_blackjeans.webp"
+    },
+    {
+      "id": 11,
+      "name": "Black Loose Pants",
+      "type": "pants",
+      "imageUrl": "assets/clothes/pants/pants_blackloose.webp"
+    },
+    {
+      "id": 12,
+      "name": "Blue Jeans Pants",
+      "type": "pants",
+      "imageUrl": "assets/clothes/pants/pants_bluejeans.webp"
+    },
+    {
+      "id": 13,
+      "name": "Green Pants",
+      "type": "pants",
+      "imageUrl": "assets/clothes/pants/pants_green.webp"
+    },
+    {
+      "id": 14,
+      "name": "Grey Pants",
+      "type": "pants",
+      "imageUrl": "assets/clothes/pants/pants_grey.webp"
+    },
+    {
+      "id": 15,
+      "name": "Jeans Pants",
+      "type": "pants",
+      "imageUrl": "assets/clothes/pants/pants_jeans.webp"
+    },
+    {
+      "id": 16,
+      "name": "Skinny Jeans Pants",
+      "type": "pants",
+      "imageUrl": "assets/clothes/pants/pants_skimnyjeans.webp"
+    },
+    {
+      "id": 17,
+      "name": "Adidas Dress",
+      "type": "dress",
+      "imageUrl": "assets/clothes/dress/dress_adidas.png"
+    },
+    {
+      "id": 18,
+      "name": "Black Short Dress",
+      "type": "dress",
+      "imageUrl": "assets/clothes/dress/dress_blackshort.webp"
+    },
+    {
+      "id": 19,
+      "name": "Blue Dress",
+      "type": "dress",
+      "imageUrl": "assets/clothes/dress/dress_blue.png"
+    },
+    {
+      "id": 20,
+      "name": "Green Dress",
+      "type": "dress",
+      "imageUrl": "assets/clothes/dress/dress_green.webp"
+    },
+    {
+      "id": 21,
+      "name": "Long Black Dress",
+      "type": "dress",
+      "imageUrl": "assets/clothes/dress/dress_longblack.webp"
+    },
+    {
+      "id": 22,
+      "name": "Red Dress",
+      "type": "dress",
+      "imageUrl": "assets/clothes/dress/dress_red.png"
+    },
+    {
+      "id": 23,
+      "name": "White Dress",
+      "type": "dress",
+      "imageUrl": "assets/clothes/dress/dress_winite.webp"
+    },
+    {
+      "id": 24,
+      "name": "Asics Shoes",
+      "type": "shoes",
+      "imageUrl": "assets/clothes/shoes/shoes_asics.png"
+    },
+    {
+      "id": 25,
+      "name": "Black Shoes",
+      "type": "shoes",
+      "imageUrl": "assets/clothes/shoes/shoes_black.webp"
+    },
+    {
+      "id": 26,
+      "name": "Boots Shoes",
+      "type": "shoes",
+      "imageUrl": "assets/clothes/shoes/shoes_boots.webp"
+    },
+    {
+      "id": 27,
+      "name": "Converse Shoes",
+      "type": "shoes",
+      "imageUrl": "assets/clothes/shoes/shoes_converse.webp"
+    },
+    {
+      "id": 28,
+      "name": "Loafers Shoes",
+      "type": "shoes",
+      "imageUrl": "assets/clothes/shoes/shoes_loafers.webp"
+    },
+    {
+      "id": 29,
+      "name": "Onitsuka Shoes",
+      "type": "shoes",
+      "imageUrl": "assets/clothes/shoes/shoes_onitsuka.webp"
+    },
+    {
+      "id": 30,
+      "name": "White Shoes",
+      "type": "shoes",
+      "imageUrl": "assets/clothes/shoes/shoes_white.webp"
+    }
+  ]
+}

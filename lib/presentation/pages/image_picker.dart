@@ -37,7 +37,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pick an Image', style: AppTypography.pageTitle),
+        title: Text('Pick an Image', style: AppTypography.pageTitle(context)),
         backgroundColor: AppColors.background,
       ),
       body: Center(
@@ -60,7 +60,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
               onPressed: () => _pickImage(ImageSource.gallery),
               child: Text(
                 'Pick from Gallery',
-                style: AppTypography.cardLabel.copyWith(
+                style: AppTypography.cardLabel(context).copyWith(
                   color: AppColors.background,
                 ), // Properly set text style
               ),
@@ -73,7 +73,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
               onPressed: () => _pickImage(ImageSource.camera),
               child: Text(
                 'Take a Photo',
-                style: AppTypography.cardLabel.copyWith(
+                style: AppTypography.cardLabel(context).copyWith(
                   color: AppColors.background,
                 ),
               ),

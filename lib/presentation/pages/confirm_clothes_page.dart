@@ -14,7 +14,7 @@ class ConfirmClothesPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Confirm Outfit',
-          style: AppTypography.pageTitle,
+          style: AppTypography.pageTitle(context),
         ),
         backgroundColor: AppColors.background,
         leading: IconButton(
@@ -45,9 +45,7 @@ class ConfirmClothesPage extends StatelessWidget {
                   onPressed: () => Navigator.pop(context),
                   child: Text(
                     'Retake',
-                    style: AppTypography.cardLabel.copyWith(
-                      color: AppColors.background,
-                    ),
+                    style: AppTypography.cardLabel(context),
                   ),
                 ),
                 ElevatedButton(
@@ -62,9 +60,7 @@ class ConfirmClothesPage extends StatelessWidget {
                   },
                   child: Text(
                     'Confirm',
-                    style: AppTypography.cardLabel.copyWith(
-                      color: AppColors.background,
-                    ),
+                    style: AppTypography.cardLabel(context),
                   ),
                 ),
               ],

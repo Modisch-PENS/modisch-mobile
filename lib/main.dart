@@ -5,7 +5,7 @@ import 'presentation/pages/home_page.dart';
 import 'presentation/pages/wardrobe_page.dart';
 import 'presentation/pages/model_page.dart';
 import 'presentation/pages/make_model_page.dart';
-import 'presentation/pages/add_clothes_page.dart';
+import 'presentation/pages/image_picker.dart';
 import 'presentation/widgets/expanding_fab.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -37,7 +37,7 @@ class ModischApp extends StatelessWidget {
         '/home': (context) => const HomePage(),
         '/wardrobe': (context) => const WardrobePage(),
         '/model': (context) => const ModelPage(),
-        '/add_clothes': (context) => const AddClothesPage(),
+        '/image_picker': (context) => ImagePickerPage(),
         '/make_model': (context) => const MakeModelPage(),
       },
       debugShowCheckedModeBanner: false,
@@ -70,9 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
       body: IndexedStack(
         index: _currentIndex,
         children: _pages,
