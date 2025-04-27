@@ -1,24 +1,34 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
-import 'package:modisch/features/home/presentation/pages/homepage.dart';
-import 'package:modisch/config/theme/app_theme.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'core/routes/routes.dart';
 
-void main() {
-  runApp(const ModischApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Correctly initialize Hive
+  await Hive.initFlutter();
+
+  // Open the 'wardrobe' box
+  await Hive.openBox('wardrobe');
+
+  // Run the app
+  runApp(const ProviderScope(child: ModischApp()));
 }
+final _appRouter = AppRouter();
 
 class ModischApp extends StatelessWidget {
   const ModischApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Modisch',
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
-      home: const HomePage(),
+      title: 'Modisch',
+      theme: ThemeData(
+        useMaterial3: true,
+      ),
+      routerConfig: _appRouter.router,
     );
   }
 }
-
-
