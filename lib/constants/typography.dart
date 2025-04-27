@@ -8,27 +8,38 @@ class AppTypography {
     ).black.merge(base ?? const TextTheme());
   }
 
-  static TextStyle get pageTitle {
-    return getM3TextTheme().headlineMedium!.copyWith(
+  /// Returns the text style for page titles.
+  static TextStyle pageTitle(BuildContext context) {
+    return Theme.of(context).textTheme.headlineMedium!.copyWith(
       color: AppColors.secondary,
       fontWeight: FontWeight.w500,
     );
   }
 
-  static TextStyle get categoryTabViewList {
-    return getM3TextTheme().bodyLarge!;
+  /// Returns the text style for category tab view lists.
+  static TextStyle categoryTabViewList(BuildContext context) {
+    return getM3TextTheme(Theme.of(context).textTheme).bodyLarge!;
   }
 
-  static TextStyle get inputTextPlaceholder {
-    return getM3TextTheme().bodyLarge!;
+  /// Returns the text style for search bar hint text.
+  static TextStyle searchBarHintText(BuildContext context) {
+    return getM3TextTheme(Theme.of(context).textTheme).bodyLarge!;
   }
 
-  static TextStyle get buttonLabel {
-    return getM3TextTheme().labelLarge!.copyWith(fontWeight: FontWeight.w500);
+  /// Returns the text style for input text placeholders.
+  static TextStyle inputTextPlaceholder(BuildContext context) {
+    return getM3TextTheme(Theme.of(context).textTheme).bodyLarge!;
   }
 
-  static TextStyle get cardLabel {
-    return getM3TextTheme().bodySmall!;
+  /// Returns the text style for button labels.
+  static TextStyle buttonLabel(BuildContext context) {
+    return getM3TextTheme(
+      Theme.of(context).textTheme,
+    ).labelLarge!.copyWith(fontWeight: FontWeight.w500);
+  }
+
+  /// Returns the text style for card labels.
+  static TextStyle cardLabel(BuildContext context) {
+    return getM3TextTheme(Theme.of(context).textTheme).bodySmall!;
   }
 }
-
