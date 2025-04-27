@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.only(left: 24),
           child: Text(
             'Hello user',
-            style: AppTypography.pageTitle
+            style: AppTypography.pageTitle(context)
           ),
         ),
         actions: [
@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                       flex: 1,
                       child: Text(
                         'DECIDE WHAT\nYOU WANNA\nWEAR TODAY!',
-                        style: AppTypography.pageTitle.copyWith(fontSize: 20)
+                        style: AppTypography.pageTitle(context)
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.all(16),
               child: Text(
                 'Recent Model',
-                style: AppTypography.buttonLabel.copyWith(fontSize: 18),
+                style: AppTypography.buttonLabel(context)
               ),
             ),
             Padding(
@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.all(16),
               child: Text(
                 'Recent Clothes',
-                style: AppTypography.buttonLabel.copyWith(fontSize: 18),
+                style: AppTypography.buttonLabel(context)
               ),
             ),
             Padding(
@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
         BottomNavigationBarItem(icon: Icon(Icons.library_music), label: ''),
       ],
     ),
-  
+
     );
   }
 
