@@ -1,9 +1,28 @@
-// lib/constants/colors/app_colors.dart
 import 'package:flutter/material.dart';
 
+/// Static class to store the primary color scheme of the application.
+/// Use these constants to ensure consistent colors throughout the app.
 class AppColors {
-  static const Color primary = Color(0xFFFCFCFC); //canvas
+  /// The primary background color (canvas).
+  /// Typically used for the scaffold or main container.
+  static const Color primary = Color(0xFFFCFCFC);
+
+  /// A slightly darker background color than [primary].
+  /// Used for general page backgrounds.
   static const Color background = Color(0xFFF9F9F9);
-  static const Color tertiary = Color(0xFF21A8DE);  //emphasized component
-  static const Color secondary = Color(0xFF343A40); //warna font, selected button, dll
+
+  /// A vibrant accent color (tertiary).
+  /// Used for primary buttons, emphasized icons, or important interactive elements.
+  static const Color tertiary = Color(0xFF21A8DE);
+
+  /// A secondary color for text, selected buttons, and other key elements.
+  /// Provides good contrast against [primary] and [background].
+  static const Color secondary = Color(0xFF343A40);
+
+  /// A color for disabled elements.
+  /// Typically used for inactive buttons or text.
+  static const Color disabled = Color(0xFFD9D9D9);
+
+  /// A color for components within the SearchBar.
+  static const Color searchBarComponents = Color(0xFFD9D9D9);
 }
