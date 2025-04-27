@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:modisch/constants/typography.dart';
+import 'package:modisch/pages/main_navigation_page.dart';
+import 'package:modisch/pages/model_page.dart';
+import 'package:modisch/pages/wardrobe_page.dart';
 import 'constants/colors.dart';
 import 'package:modisch/pages/home_page.dart';
 
@@ -26,7 +29,13 @@ class MyApp extends StatelessWidget {
         ),
         textTheme: AppTypography.getM3TextTheme(),
       ),
-      home: const HomePage(),
+      initialRoute: '/',
+      routes: {
+        '/':(context) => const MainNavigationPage(),
+        '/home': (context) => const HomePage(),
+        '/wardrobe': (context) => const WardrobePage(),
+        '/model': (context) => const ModelPage()
+      },
     );
   }
 }
