@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +12,7 @@ class HomeContentPage extends StatefulWidget {
   _HomeContentPageState createState() => _HomeContentPageState();
 }
 
-class _HomeContentPageState extends State<HomeContentPage> {
+class _HomeContentPageState extends State<HomeContentPage> with RouteAware {
   List<String> _recentImages = [];
   TextEditingController _searchController = TextEditingController();
 
@@ -21,25 +22,59 @@ class _HomeContentPageState extends State<HomeContentPage> {
     _loadRecentImages();
   }
 
+  // Load images from SharedPreferences asynchronously
   Future<void> _loadRecentImages() async {
-    final prefs = await SharedPreferences.getInstance(); // ini buat ngambil gambar dari wwardrobeya
-    final categories = ['Shirt', 'Pants', 'Dress', 'Shoes']; //tab shirt dll
-    List<String> allImages = [];
+    final prefs = await SharedPreferences.getInstance();
+    final categories = ['Shirt', 'Pants', 'Dress', 'Shoes'];
+    List<String> allImagePaths = [];
 
     for (String category in categories) {
-      final images = prefs.getStringList('images_$category') ?? [];
-      allImages.addAll(images);
+      final jsonItems = prefs.getStringList('items_$category') ?? [];
+      for (final jsonItem in jsonItems) {
+        try {
+          final itemMap = jsonDecode(jsonItem);
+          if (itemMap is Map && itemMap.containsKey('path')) {
+            allImagePaths.add(itemMap['path']);
+          }
+        } catch (e) {
+          print("Error decoding JSON for $category: $e");
+          continue; // Skip invalid JSON entries
+        }
+      }
     }
 
-    allImages.sort((a, b) {
+    // Sort by filename assuming it's timestamp.jpg (e.g., 1682550193581.jpg)
+    allImagePaths.sort((a, b) {
       int aTime = int.tryParse(a.split('/').last.split('.').first) ?? 0;
       int bTime = int.tryParse(b.split('/').last.split('.').first) ?? 0;
       return bTime.compareTo(aTime);
     });
 
+    // Filter out non-existent files asynchronously
+    List<String> validImagePaths = [];
+    for (var path in allImagePaths) {
+      final file = File(path);
+      if (await file.exists()) {
+        validImagePaths.add(path);
+      }
+    }
+
+    // Update UI with valid image paths
     setState(() {
-      _recentImages = allImages.take(5).toList();
+      _recentImages = validImagePaths.take(5).toList();
     });
+  }
+
+  @override
+  void didPopNext() {
+    super.didPopNext();
+    _loadRecentImages(); // Reload images when returning to this page
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose(); // Dispose TextEditingController to prevent memory leak
+    super.dispose();
   }
 
   @override
@@ -53,7 +88,6 @@ class _HomeContentPageState extends State<HomeContentPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-
               // Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -83,7 +117,7 @@ class _HomeContentPageState extends State<HomeContentPage> {
               ),
 
               // Banner
-              Container(  // INI BUAT NGATUR BOX YANG DI CAROUSEL YAA
+              Container(
                 height: 180,
                 decoration: BoxDecoration(
                   color: AppColors.background,
@@ -109,7 +143,7 @@ class _HomeContentPageState extends State<HomeContentPage> {
                       ),
                     ),
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),  // Menambahkan border radius
+                      borderRadius: BorderRadius.circular(20.0),
                       child: Image.asset(
                         'assets/images/aldino.jpg',
                         width: 150,
@@ -117,7 +151,6 @@ class _HomeContentPageState extends State<HomeContentPage> {
                         fit: BoxFit.cover,
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -133,10 +166,11 @@ class _HomeContentPageState extends State<HomeContentPage> {
                 child: _recentImages.isNotEmpty
                     ? ListView.separated(
                         scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 16), // kiri-kanan rapih
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         itemCount: _recentImages.length,
-                        separatorBuilder: (context, index) => const SizedBox(width: 12), // jarak antar gambar
+                        separatorBuilder: (context, index) => const SizedBox(width: 12),
                         itemBuilder: (context, index) {
+                          final file = File(_recentImages[index]);
                           return Container(
                             width: 130,
                             height: 130,
@@ -153,10 +187,12 @@ class _HomeContentPageState extends State<HomeContentPage> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(16),
-                              child: Image.file(
-                                File(_recentImages[index]),
-                                fit: BoxFit.cover,
-                              ),
+                              child: file.existsSync()
+                                  ? Image.file(
+                                      file,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : const Center(child: Icon(Icons.broken_image)),
                             ),
                           );
                         },

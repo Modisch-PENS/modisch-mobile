@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:modisch/constants/colors.dart';
@@ -6,7 +7,27 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:modisch/pages/confirm_clothes_page.dart';
-import 'package:modisch/pages/crop_images_page.dart'; // <- Tambahkan ini
+import 'package:modisch/pages/crop_images_page.dart';
+
+// Model class for storing a clothing item
+class ClothesItem {
+  final String path;
+  final String name;
+
+  ClothesItem({required this.path, required this.name});
+
+  factory ClothesItem.fromJson(Map<String, dynamic> json) {
+    return ClothesItem(
+      path: json['path'] as String,
+      name: json['name'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'path': path,
+        'name': name,
+      };
+}
 
 class WardrobePage extends StatefulWidget {
   const WardrobePage({Key? key}) : super(key: key);
@@ -18,82 +39,84 @@ class WardrobePage extends StatefulWidget {
 class _WardrobePageState extends State<WardrobePage> {
   final double boxWidth = 160;
   final double boxHeight = 184;
-
   final List<String> _categories = ['Shirt', 'Pants', 'Dress', 'Shoes'];
   int _currentTabIndex = 0;
   bool _isCameraOrGalleryVisible = false;
 
-  Map<String, List<String>> _categoryImages = {
-    'Shirt': [],
-    'Pants': [],
-    'Dress': [],
-    'Shoes': [],
-  };
+  late Map<String, List<ClothesItem>> _categoryItems;
 
   @override
   void initState() {
     super.initState();
-    _loadImages();
+    _categoryItems = {for (var c in _categories) c: []};
+    _loadItems();
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final String? croppedImagePath = await Navigator.push(
+    // 1) Pick & crop
+    final croppedImagePath = await Navigator.push<String?>( 
+      context,
+      MaterialPageRoute(builder: (_) => CropImagePage(source: source)),
+    );
+    if (croppedImagePath == null) return;
+
+    // 2) Open confirm page with onSave callback
+    await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CropImagePage(source: source),
-      ),
-    );
+        builder: (_) => ConfirmClothesPage(
+          imagePath: croppedImagePath,
+          onSave: (selectedCategory, clothesName) async {
+            // Copy file to app directory
+            final dir = await getApplicationDocumentsDirectory();
+            final savedPath =
+                '${dir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+            try {
+              await File(croppedImagePath).copy(savedPath);
 
-    if (croppedImagePath != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ConfirmClothesPage(
-            imagePath: croppedImagePath,
-            onCategorySelected: (selectedCategory, clothesName) async {
-              final directory = await getApplicationDocumentsDirectory();
-              final path = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-              File imageFile = File(croppedImagePath);
-              await imageFile.copy(path);
-
+              // Update local state
               setState(() {
-                _categoryImages[selectedCategory]?.add(path);
+                _categoryItems[selectedCategory]!
+                    .add(ClothesItem(path: savedPath, name: clothesName));
               });
 
-              _saveImages();
-              Navigator.pop(context);
-            },
-          ),
+              // Save to SharedPreferences
+              final prefs = await SharedPreferences.getInstance();
+              final key = 'items_${selectedCategory}';  // Fixed string interpolation
+              final list = _categoryItems[selectedCategory]!;
+              final jsonList =
+                  list.map((item) => jsonEncode(item.toJson())).toList();
+              await prefs.setStringList(key, jsonList);
+            } catch (e) {
+              // Handle file copy error
+              print("Error copying file: $e");
+            }
+          },
         ),
-      );
-    }
+      ),
+    );
   }
 
-  Future<void> _saveImages() async {
+  Future<void> _loadItems() async {
     final prefs = await SharedPreferences.getInstance();
-    for (var category in _categories) {
-      await prefs.setStringList('images_$category', _categoryImages[category]!);
-    }
-  }
-
-  Future<void> _loadImages() async {
-    final prefs = await SharedPreferences.getInstance();
-    for (var category in _categories) {
-      _categoryImages[category] = prefs.getStringList('images_$category') ?? [];
-    }
-    setState(() {});
+    setState(() {
+      for (var category in _categories) {
+        final jsonList = prefs.getStringList('items_${category}') ?? [];
+        _categoryItems[category] = jsonList
+            .map((j) => ClothesItem.fromJson(jsonDecode(j)))
+            .toList();
+      }
+    });
   }
 
   void _toggleCameraGallery() {
-    setState(() {
-      _isCameraOrGalleryVisible = !_isCameraOrGalleryVisible;
-    });
+    setState(() => _isCameraOrGalleryVisible = !_isCameraOrGalleryVisible);
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: _categories.length,
       initialIndex: _currentTabIndex,
       child: Scaffold(
         backgroundColor: AppColors.background,
@@ -107,38 +130,30 @@ class _WardrobePageState extends State<WardrobePage> {
             unselectedLabelColor: AppColors.disabled,
             labelStyle: AppTypography.buttonLabel,
             unselectedLabelStyle: AppTypography.buttonLabel,
-            onTap: (index) {
-              setState(() {
-                _currentTabIndex = index;
-              });
-            },
-            tabs: const [
-              Tab(text: 'Shirt'),
-              Tab(text: 'Pants'),
-              Tab(text: 'Dress'),
-              Tab(text: 'Shoes'),
-            ],
+            onTap: (i) => setState(() => _currentTabIndex = i),
+            tabs: _categories.map((c) => Tab(text: c)).toList(),
           ),
         ),
         body: TabBarView(
-          children: List.generate(4, (tabIndex) {
-            final category = _categories[tabIndex];
-            final images = _categoryImages[category]!;
-
+          children: _categories.map((category) {
+            final items = _categoryItems[category]!;
             return Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: LayoutBuilder(
-                builder: (context, constraints) {
-                  int crossAxisCount = (constraints.maxWidth / (boxWidth + 16)).floor();
+                builder: (ctx, constraints) {
+                  final crossCount =
+                      (constraints.maxWidth / (boxWidth + 16)).floor().clamp(1, 4);
                   return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
+                    gridDelegate:
+                        SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossCount,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
                       childAspectRatio: boxWidth / boxHeight,
                     ),
-                    itemCount: images.length,
-                    itemBuilder: (_, index) {
+                    itemCount: items.length,
+                    itemBuilder: (_, idx) {
+                      final item = items[idx];
                       return Container(
                         decoration: BoxDecoration(
                           color: AppColors.primary,
@@ -157,17 +172,19 @@ class _WardrobePageState extends State<WardrobePage> {
                             Expanded(
                               flex: 2,
                               child: ClipRRect(
-                                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                                borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(16)),
                                 child: Image.file(
-                                  File(images[index]),
+                                  File(item.path),
                                   fit: BoxFit.cover,
                                 ),
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 4),
                               child: Text(
-                                '$category ${index + 1}',
+                                item.name,
                                 textAlign: TextAlign.center,
                                 style: AppTypography.cardLabel,
                               ),
@@ -180,30 +197,30 @@ class _WardrobePageState extends State<WardrobePage> {
                 },
               ),
             );
-          }),
+          }).toList(),
         ),
         floatingActionButton: _isCameraOrGalleryVisible
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   FloatingActionButton(
-                    onPressed: () => _pickImage(ImageSource.gallery),
+                    heroTag: 'gallery',
                     backgroundColor: AppColors.tertiary,
-                    heroTag: null,
+                    onPressed: () => _pickImage(ImageSource.gallery),
                     child: const Icon(Icons.photo_library),
                   ),
                   const SizedBox(height: 10),
                   FloatingActionButton(
-                    onPressed: () => _pickImage(ImageSource.camera),
+                    heroTag: 'camera',
                     backgroundColor: AppColors.tertiary,
-                    heroTag: null,
+                    onPressed: () => _pickImage(ImageSource.camera),
                     child: const Icon(Icons.camera_alt),
                   ),
                 ],
               )
             : FloatingActionButton(
-                onPressed: _toggleCameraGallery,
                 backgroundColor: AppColors.tertiary,
+                onPressed: _toggleCameraGallery,
                 child: const Icon(Icons.add_a_photo),
               ),
       ),
