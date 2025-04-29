@@ -2,13 +2,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:modisch/constants/colors.dart';
 import 'package:modisch/constants/typography.dart';
-//import 'package:modisch/pages/home_page.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:modisch/pages/confirm_clothes_page.dart';
-import 'package:image_cropper/image_cropper.dart'; // Pastikan halaman ini diimpor
+import 'package:modisch/pages/crop_images_page.dart'; // <- Tambahkan ini
 
 class WardrobePage extends StatefulWidget {
   const WardrobePage({Key? key}) : super(key: key);
@@ -25,7 +23,6 @@ class _WardrobePageState extends State<WardrobePage> {
   int _currentTabIndex = 0;
   bool _isCameraOrGalleryVisible = false;
 
-  // Gambar per kategori
   Map<String, List<String>> _categoryImages = {
     'Shirt': [],
     'Pants': [],
@@ -40,39 +37,23 @@ class _WardrobePageState extends State<WardrobePage> {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-  final ImagePicker picker = ImagePicker();
-  final XFile? pickedImage = await picker.pickImage(source: source);
-
-  if (pickedImage != null) {
-    // Step crop dulu
-    final croppedFile = await ImageCropper().cropImage(
-      sourcePath: pickedImage.path,
-      aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
-      uiSettings: [
-        AndroidUiSettings(
-          toolbarTitle: 'Crop Image',
-          toolbarColor: AppColors.primary,
-          toolbarWidgetColor: Colors.white,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false,
-        ),
-        IOSUiSettings(
-          title: 'Crop Image',
-        ),
-      ],
+    final String? croppedImagePath = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CropImagePage(source: source),
+      ),
     );
 
-    if (croppedFile != null) {
-      // Kalau hasil crop ada, baru lanjut ke Confirm Page
+    if (croppedImagePath != null) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ConfirmClothesPage(
-            imagePath: croppedFile.path,
+            imagePath: croppedImagePath,
             onCategorySelected: (selectedCategory, clothesName) async {
               final directory = await getApplicationDocumentsDirectory();
               final path = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-              File imageFile = File(croppedFile.path);
+              File imageFile = File(croppedImagePath);
               await imageFile.copy(path);
 
               setState(() {
@@ -80,14 +61,13 @@ class _WardrobePageState extends State<WardrobePage> {
               });
 
               _saveImages();
-              Navigator.pop(context); // Balik ke WardrobePage
+              Navigator.pop(context);
             },
           ),
         ),
       );
     }
   }
-}
 
   Future<void> _saveImages() async {
     final prefs = await SharedPreferences.getInstance();
@@ -101,7 +81,7 @@ class _WardrobePageState extends State<WardrobePage> {
     for (var category in _categories) {
       _categoryImages[category] = prefs.getStringList('images_$category') ?? [];
     }
-    setState(() {}); // Memperbarui tampilan setelah gambar dimuat
+    setState(() {});
   }
 
   void _toggleCameraGallery() {
@@ -112,17 +92,16 @@ class _WardrobePageState extends State<WardrobePage> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController( //INI BUAT TABNYA YA
+    return DefaultTabController(
       length: 4,
       initialIndex: _currentTabIndex,
       child: Scaffold(
         backgroundColor: AppColors.background,
-        appBar: AppBar( // INI TU HEADEER
+        appBar: AppBar(
           backgroundColor: AppColors.primary,
           elevation: 1,
-          
           title: Text('Wardrobe', style: AppTypography.pageTitle),
-          bottom: TabBar( //NAH INI TUH TAB BAR
+          bottom: TabBar(
             indicatorColor: AppColors.tertiary,
             labelColor: AppColors.secondary,
             unselectedLabelColor: AppColors.disabled,
