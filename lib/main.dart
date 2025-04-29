@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modisch/constants/typography.dart';
-import 'package:modisch/presentation/pages/homepage/homepage.dart';
+import 'package:modisch/presentation/pages/main/main_page.dart';
 
 import 'constants/colors.dart';
 
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         ),
         textTheme: AppTypography.getM3TextTheme(),
       ),
-      home: const HomePage(title: 'Home Page'),
+      home: MainPage(),
     );
   }
 }

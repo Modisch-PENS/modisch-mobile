@@ -13,14 +13,18 @@ class HomepageHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text('Hello User', style: AppTypography.pageTitle(context)),
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.secondary,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(Icons.person, color: Colors.white),
+          // Container(
+          //   width: 40,
+          //   height: 40,
+          //   decoration: BoxDecoration(
+          //     color: AppColors.secondary,
+          //     shape: BoxShape.circle,
+          //   ),
+          //   child: const Icon(Icons.person, color: Colors.white),
+          // ),
+          const CircleAvatar(
+            backgroundColor: AppColors.secondary,
+            child: Icon(Icons.person, color: AppColors.background),
           ),
         ],
       ),

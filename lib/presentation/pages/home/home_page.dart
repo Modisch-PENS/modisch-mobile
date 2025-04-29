@@ -9,9 +9,7 @@ import 'package:modisch/presentation/widgets/search_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
-
   final String title;
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -30,22 +28,19 @@ final List<String> shirtImages = [
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    return SafeArea(
+      child: SingleChildScrollView(
+        // Tambahkan SingleChildScrollView di sini
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 24),
+          padding: const EdgeInsets.symmetric(vertical: 24),
           child: Column(
             children: [
               HomepageHeader(),
               verticalSpace(24),
               SearchBarComponent(),
-
               verticalSpace(24),
               CarouselContainer(),
-
               verticalSpace(24),
-
-              // SizedBox(height: 30),
               RecentInfo(title: 'model', imageAssets: shirtImages),
               verticalSpace(24),
               RecentInfo(title: 'clothes', imageAssets: shirtImages),
