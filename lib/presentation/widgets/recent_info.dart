@@ -26,47 +26,65 @@ class RecentInfo extends StatelessWidget {
           ),
         ),
         verticalSpace(16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: AppColors.disabled, width: 1),
-                ),
-                child: SizedBox(
-                  height: 125,
-                  width: 125,
-                  child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Center(
-                      child: Text(
-                        'No $title added yet',
-                        style: TextStyle(color: AppColors.disabled),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+              horizontalSpace(24),
+              ...imageAssets.asMap().entries.map((entry) {
+                final isLast = entry.key == imageAssets.length - 1;
+                return Padding(
+                  padding: EdgeInsets.only(right: isLast ? 0 : 16),
+                  child: _ListItem(
+                    imagePath: imageAssets[entry.key],
+                    itemName: _getItemName(imageAssets[entry.key]),
                   ),
-                ),
-              ),
+                );
+              }),
+              horizontalSpace(24),
             ],
           ),
-          // child: HorizontalScrollView.builder(
-          //   itemWidth: 125, // Width matching the image width
-          //   crossAxisSpacing: 16, // Spacing between items in the same row.
-          //   alignment:
-          //       CrossAxisAlignment.center, // Alignment of items within the row
-          //   itemCount: imageAssets.length, // Total number of items in the list.
-          //   itemBuilder: (BuildContext context, int index) {
-          //     return _ListItem(
-          //       imagePath: imageAssets[index],
-          //       itemName: _getItemName(imageAssets[index]),
-          //     );
-          //   },
-          // ),
         ),
+        // HorizontalScrollView.builder(
+        //   itemWidth: 125, // Width matching the image width
+        //   crossAxisSpacing: 16, // Spacing between items in the same row.
+        //   alignment:
+        //       CrossAxisAlignment.center, // Alignment of items within the row
+        //   itemCount: imageAssets.length, // Total number of items in the list.
+        //   itemBuilder: (BuildContext context, int index) {
+        //     return _ListItem(
+        //       imagePath: imageAssets[index],
+        //       itemName: _getItemName(imageAssets[index]),
+        //     );
+        //   },
+        // ),
+        // Kosongan ///
+        // Row(
+        //   children: [
+        //     Container(
+        //       decoration: BoxDecoration(
+        //         color: AppColors.background,
+        //         borderRadius: BorderRadius.circular(20),
+        //         border: Border.all(color: AppColors.disabled, width: 1),
+        //       ),
+        //       child: SizedBox(
+        //         height: 125,
+        //         width: 125,
+        //         child: Padding(
+        //           padding: EdgeInsets.all(16),
+        //           child: Center(
+        //             child: Text(
+        //               'No $title added yet',
+        //               style: TextStyle(color: AppColors.disabled),
+        //               textAlign: TextAlign.center,
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ],
     );
   }
