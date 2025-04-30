@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:modisch/constants/typography.dart';
-import 'package:modisch/pages/main_navigation_page.dart';
-import 'package:modisch/pages/model_page.dart';
-import 'package:modisch/pages/wardrobe_page.dart';
+import 'package:modisch/presentation/pages/main_navigation_page.dart';
+import 'package:modisch/presentation/pages/model_page.dart';
+import 'package:modisch/presentation/pages/wardrobe_page.dart';
 import 'constants/colors.dart';
-import 'package:modisch/pages/home_page.dart';
+import 'package:modisch/presentation/pages/home_page.dart';
 
 void main() {
   runApp(const MyApp());
