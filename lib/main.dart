@@ -5,8 +5,12 @@ import 'package:modisch/presentation/pages/model_page.dart';
 import 'package:modisch/presentation/pages/wardrobe_page.dart';
 import 'constants/colors.dart';
 import 'package:modisch/presentation/pages/home_page.dart';
+import 'package:modisch/services/hive_services.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await HiveServices.init();
+  await HiveServices.addDummyData();
   runApp(const MyApp());
 }
 
@@ -28,6 +32,7 @@ class MyApp extends StatelessWidget {
           tertiary: AppColors.tertiary,
         ),
         textTheme: AppTypography.getM3TextTheme(),
+        scaffoldBackgroundColor: AppColors.background
       ),
       initialRoute: '/',
       routes: {
