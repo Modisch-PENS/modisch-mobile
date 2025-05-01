@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
-import 'package:lottie/lottie.dart';
 import 'package:modisch/constants/colors.dart';
 //import 'package:modisch/constants/typography.dart';
 import 'package:modisch/presentation/dashboard/page/dashboard.dart';
+import 'package:modisch/presentation/onboard/widget/animation.dart';
+import 'package:modisch/presentation/onboard/widget/subtitle.dart';
+import 'package:modisch/presentation/onboard/widget/title.dart';
 
 class OnboardPage extends StatelessWidget {
   const OnboardPage({super.key});
@@ -30,112 +32,50 @@ class OnboardPage extends StatelessWidget {
         ),
       ),
       controllerColor: AppColors.tertiary,
-      headerBackgroundColor: Colors.white,
-      pageBackgroundColor: Colors.white,
+      headerBackgroundColor: AppColors.background,
+      //pageBackgroundColor: ,
       background: const [SizedBox(), SizedBox(), SizedBox()],
       speed: 1.8,
       pageBodies: [
-        Container(
-          //alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(horizontal: 40),
+        Padding(
+          padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Lottie.asset(
-                'assets/onboard/onboard1.json',
-                width: 300,
-                height: 300,
-              ),
-              const SizedBox(height: 30),
-              Text(
-                'Welcome to Modisch!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: AppColors.secondary,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Organize your wardrobe and create perfect outfits easily',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black26,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
+            children: const [
+              OnBoardAnimation(assetPath: 'assets/onboard/onboard_1.json'),
+              SizedBox(height: 30),
+              OnBoardTitle(text: 'Welcome to Modisch'),
+              OnBoardSubtitle(
+                text:
+                    'Organize your wardrobe and create perfect outfits easily',
               ),
             ],
           ),
         ),
-        Container(
-          //alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(horizontal: 40),
+        Padding(
+          padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Lottie.asset(
-                'assets/onboard/onboard2.json',
-                width: 300,
-                height: 300,
-              ),
-              const SizedBox(height: 30),
-              Text(
-                'Upload Your Clothes',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: AppColors.secondary,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Easily and clothes to your digital closet',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black26,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
-                ),
+            children: const [
+              OnBoardAnimation(assetPath: 'assets/onboard/onboard_2.json'),
+              SizedBox(height: 30),
+              OnBoardTitle(text: 'Upload Your Clothes'),
+              OnBoardSubtitle(
+                text: 'Easily add clothes to your digital closet',
               ),
             ],
           ),
         ),
-        Container(
-          //alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(horizontal: 40),
+        Padding(
+          padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-                Lottie.asset(
-                'assets/onboard/digital_closet.json',
-                width: 300,
-                height: 300,
-              ),
-              const SizedBox(height: 30),
-              Text(
-                'Mix and Match',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: AppColors.secondary,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Combine your favoutite pieces into stunning looks',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black26,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
-                ),
+            children: const [
+              OnBoardAnimation(assetPath: 'assets/onboard/onboard3.json'),
+              SizedBox(height: 30),
+              OnBoardTitle(text: 'Mix and Match'),
+              OnBoardSubtitle(
+                text: 'Combine your favourite pieces into stunning looks',
               ),
             ],
           ),
