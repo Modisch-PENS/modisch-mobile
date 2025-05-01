@@ -29,6 +29,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex:  _currentIndex,
+        backgroundColor: AppColors.primary,
         selectedItemColor: AppColors.tertiary,
         unselectedItemColor: AppColors.disabled,
         onTap: (index){
