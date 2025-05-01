@@ -1,89 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:modisch/constants/typography.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'core/routes/routes.dart';
 
-import 'constants/colors.dart';
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-void main() {
-  runApp(const MyApp());
+  // Correctly initialize Hive
+  await Hive.initFlutter();
+
+  // Open the 'wardrobe' box
+  await Hive.openBox('wardrobe');
+
+  // Run the app
+  runApp(const ProviderScope(child: ModischApp()));
 }
+final _appRouter = AppRouter();
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ModischApp extends StatelessWidget {
+  const ModischApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: 'Modisch',
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.light(
-          primary: AppColors.primary,
-          surface: AppColors.background,
-          secondary: AppColors.secondary,
-          tertiary: AppColors.tertiary,
-        ),
-        textTheme: AppTypography.getM3TextTheme(),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(
-          widget.title,
-          style: AppTypography.pageTitle, // Use your page title style
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-              style: AppTypography.buttonLabel, // Use your body text style
-            ),
-            Text(
-              '$_counter',
-              style: AppTypography.pageTitle, // Use appropriate style
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-        backgroundColor: AppColors.tertiary,
-      ),
+      routerConfig: _appRouter.router,
     );
   }
 }
