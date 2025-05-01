@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/model/outfit_model.dart';
 
 class SelectedModel with ChangeNotifier {
   String? shirt;
@@ -8,7 +9,7 @@ class SelectedModel with ChangeNotifier {
 
   void selectShirt(String? value) {
     shirt = value;
-    if (value != null) dress = null; // reset dress jika pilih shirt
+    if (value != null) dress = null;
     notifyListeners();
   }
 
@@ -24,7 +25,7 @@ class SelectedModel with ChangeNotifier {
 
   void selectDress(String? value) {
     dress = value;
-    if (value != null) shirt = null; // reset shirt jika pilih dress
+    if (value != null) shirt = null;
     notifyListeners();
   }
 
@@ -58,12 +59,27 @@ class SelectedModel with ChangeNotifier {
   }
 
   String? validateTopSelection({required String target}) {
-    if (target == 'shirt' && dress != null) {
-      return 'Anda sudah menggunakan dress sebagai atasan.';
-    }
-    if (target == 'dress' && shirt != null) {
-      return 'Anda sudah menggunakan shirt sebagai atasan.';
-    }
+    // if (target == 'shirt' && dress != null) {
+    //   return 'Anda sudah menggunakan dress sebagai atasan.';
+    // }
+    // if (target == 'dress' && shirt != null) {
+    //   return 'Anda sudah menggunakan shirt sebagai atasan.';
+    // }
     return null;
+  }
+
+  List<OutfitModel> savedOutfits = [];
+
+  void saveOutfit(String name) {
+    savedOutfits.add(
+      OutfitModel(
+        name: name,
+        shirt: shirt,
+        pants: pants,
+        dress: dress,
+        shoes: shoes,
+      ),
+    );
+    notifyListeners();
   }
 }

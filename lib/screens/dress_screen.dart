@@ -34,8 +34,9 @@ class DressScreen extends StatelessWidget {
       crossAxisCount: 2,
       children: [
         ItemCard(
-          image: 'assets/images/shirt0.png',
-          onTap: () => select(null), // None option
+          // image: 'assets/images/none.png',
+          image: ' ',
+          onTap: () => select(null),
         ),
         ItemCard(image: 'assets/images/dress1.png', onTap: () => select('dress1.png')),
         ItemCard(image: 'assets/images/dress2.png', onTap: () => select('dress2.png')),

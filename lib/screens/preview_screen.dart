@@ -78,16 +78,44 @@ class _PreviewScreenState extends State<PreviewScreen> {
                 ),
               ),
               onPressed: () {
+                final controller = TextEditingController();
                 showDialog(
                   context: context,
                   builder:
-                      (_) => AlertDialog(
-                        title: const Text('Success'),
-                        content: const Text('Your outfit has been saved!'),
+                      (ctx) => AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        title: const Text("Save Outfit"),
+                        content: TextField(
+                          controller: controller,
+                          decoration: const InputDecoration(
+                            hintText: "Enter outfit name",
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
                         actions: [
                           TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('OK'),
+                            onPressed: () => Navigator.pop(ctx),
+                            child: const Text("Cancel"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              final name = controller.text.trim();
+                              if (name.isNotEmpty) {
+                                Provider.of<SelectedModel>(
+                                  context,
+                                  listen: false,
+                                ).saveOutfit(name);
+                                Navigator.pop(ctx);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Outfit '$name' saved!"),
+                                  ),
+                                );
+                              }
+                            },
+                            child: const Text("Save"),
                           ),
                         ],
                       ),
@@ -138,7 +166,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
           context,
           listen: false,
         );
-        bool isNone = data.startsWith('none') || data.contains('0.png');
+        bool isNone = data.startsWith('none') || data.contains('none.png');
         String? actualImage = isNone ? null : data;
 
         if (tabs[_currentIndex] == 'Shirt') {
@@ -165,14 +193,49 @@ class _PreviewScreenState extends State<PreviewScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // if (selected.shirt != null)
+              //   Image.asset('assets/images/${selected.shirt!}', height: 100),
               if (selected.shirt != null)
-                Image.asset('assets/images/${selected.shirt!}', height: 100),
+                GestureDetector(
+                  onTap: () => selected.selectShirt(null),
+                  child: Image.asset(
+                    'assets/images/${selected.shirt!}',
+                    height: 100,
+                  ),
+                ),
+
+              // if (selected.dress != null)
+              //   Image.asset('assets/images/${selected.dress!}', height: 120),
               if (selected.dress != null)
-                Image.asset('assets/images/${selected.dress!}', height: 120),
+                GestureDetector(
+                  onTap: () => selected.selectDress(null),
+                  child: Image.asset(
+                    'assets/images/${selected.dress!}',
+                    height: 100,
+                  ),
+                ),
+
+              // if (selected.pants != null)
+              //   Image.asset('assets/images/${selected.pants!}', height: 100),
               if (selected.pants != null)
-                Image.asset('assets/images/${selected.pants!}', height: 100),
+                GestureDetector(
+                  onTap: () => selected.selectPants(null),
+                  child: Image.asset(
+                    'assets/images/${selected.pants!}',
+                    height: 100,
+                  ),
+                ),
+
+              // if (selected.shoes != null)
+              //   Image.asset('assets/images/${selected.shoes!}', height: 80),
               if (selected.shoes != null)
-                Image.asset('assets/images/${selected.shoes!}', height: 80),
+                GestureDetector(
+                  onTap: () => selected.selectShoes(null),
+                  child: Image.asset(
+                    'assets/images/${selected.shoes!}',
+                    height: 100,
+                  ),
+                ),
             ],
           ),
         );

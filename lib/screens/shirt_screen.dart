@@ -37,7 +37,8 @@ class ShirtScreen extends StatelessWidget {
       children: [
         // None
         ItemCard(
-          image: 'assets/images/shirt0.png',
+          // image: 'assets/images/none.png',
+          image: ' ',
           onTap: () => select(null),
         ),
         ItemCard(image: 'assets/images/shirt1.png', onTap: () => select('shirt1.png')),

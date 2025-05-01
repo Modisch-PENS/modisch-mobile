@@ -14,7 +14,7 @@ class PreviewSelectScreen extends StatelessWidget {
 
     if (category == 'Shirt') {
       items = [
-        'shirt0.png',
+        'none.png',
         'shirt1.png',
         'shirt2.png',
         'shirt3.png',
@@ -23,7 +23,7 @@ class PreviewSelectScreen extends StatelessWidget {
       ];
     } else if (category == 'Pants') {
       items = [
-        'pants0.png',
+        'none.png',
         'pants1.png',
         'pants2.png',
         'pants3.png',
@@ -32,7 +32,7 @@ class PreviewSelectScreen extends StatelessWidget {
       ];
     } else if (category == 'Dress') {
       items = [
-        'dress0.png',
+        'none.png',
         'dress1.png',
         'dress2.png',
         'dress3.png',
@@ -41,7 +41,7 @@ class PreviewSelectScreen extends StatelessWidget {
       ];
     } else if (category == 'Shoes') {
       items = [
-        'shoes0.png',
+        'none.png',
         'shoes1.png',
         'shoes2.png',
         'shoes3.png',
@@ -56,7 +56,7 @@ class PreviewSelectScreen extends StatelessWidget {
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
       children: items.map((imgName) {
-        bool isNone = imgName.contains('0.png');
+        bool isNone = imgName.contains('none.png');
 
         return ItemCard(
           image: 'assets/images/$imgName',
@@ -72,14 +72,18 @@ class PreviewSelectScreen extends StatelessWidget {
   }
 
   void _updateSelected(SelectedModel selected, String? imgPath) {
-    if (category == 'Shirt') {
-      selected.selectShirt(imgPath);
-    } else if (category == 'Pants') {
-      selected.selectPants(imgPath);
-    } else if (category == 'Dress') {
-      selected.selectDress(imgPath);
-    } else if (category == 'Shoes') {
-      selected.selectShoes(imgPath);
-    }
+  bool isNone = imgPath == null || imgPath.contains('none.png');
+  String? selectedImg = isNone ? null : imgPath;
+
+  if (category == 'Shirt') {
+    selected.selectShirt(selectedImg);
+  } else if (category == 'Pants') {
+    selected.selectPants(selectedImg);
+  } else if (category == 'Dress') {
+    selected.selectDress(selectedImg);
+  } else if (category == 'Shoes') {
+    selected.selectShoes(selectedImg);
   }
+}
+
 }

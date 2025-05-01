@@ -15,9 +15,9 @@ class ShoesScreen extends StatelessWidget {
     return GridView.count(
       crossAxisCount: 2,
       children: [
-        // Item None
         ItemCard(
-          image: 'assets/images/shoes0.png',
+          // image: 'assets/images/none.png',
+          image: ' ',
           onTap: () => select(null),
         ),
         ItemCard(image: 'assets/images/shoes1.png', onTap: () => select('shoes1.png')),

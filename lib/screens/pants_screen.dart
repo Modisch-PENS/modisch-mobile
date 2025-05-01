@@ -17,7 +17,8 @@ class PantsScreen extends StatelessWidget {
       children: [
         // Item None
         ItemCard(
-          image: 'assets/images/pants0.png',
+          // image: 'assets/images/none.png',
+          image: ' ',
           onTap: () => select(null),
         ),
         ItemCard(image: 'assets/images/pants1.png', onTap: () => select('pants1.png')),
