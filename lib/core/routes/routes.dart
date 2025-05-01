@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:go_router/go_router.dart';
 import 'package:modisch/features/home/pages/homepage.dart';
 import 'package:modisch/features/wardrobe/pages/wardrobe_page.dart';
@@ -43,7 +45,10 @@ class AppRouter {
                 routes: [
                   GoRoute(
                     path: 'add',
-                    builder: (context, state) => const AddClothingPage(),
+                    builder: (context, state) {
+                      final imageFile = state.extra as File;
+                      return AddClothingPage(imageFile: imageFile);
+                    },
                   ),
                 ],
               ),

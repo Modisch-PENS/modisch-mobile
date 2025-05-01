@@ -1,15 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:hive/hive.dart';
-import 'package:http/http.dart' as http;
 import 'package:modisch/core/database/clothing_model.dart';
-import 'wardrobe_service.dart';
-import 'dart:convert';
-import 'dart:typed_data';
+import 'package:permission_handler/permission_handler.dart';
+import '../widgets/wardrobe_service.dart';
 
 class AddClothingPage extends StatefulWidget {
-  const AddClothingPage({super.key});
+  final File imageFile;
+
+  const AddClothingPage({super.key, required this.imageFile});
 
   @override
   State<AddClothingPage> createState() => _AddClothingPageState();
@@ -23,40 +22,18 @@ class _AddClothingPageState extends State<AddClothingPage> {
   final WardrobeService _wardrobeService = WardrobeService();
 
   // Pick image from gallery or camera
-
-  Future<void> _removeBackground(File imageFile) async {
-    final String apiKey = 'YOUR_REMOVE_BG_API_KEY';
-    final Uri url = Uri.parse('https://api.remove.bg/v1.0/removebg');
-
-    final request = http.MultipartRequest('POST', url)
-      ..headers['X-Api-Key'] = apiKey
-      ..files.add(await http.MultipartFile.fromPath('image_file', imageFile.path));
-
-    final response = await request.send();
-    if (response.statusCode == 200) {
-      final bytes = await response.stream.toBytes();
-      final resultImage = File('${imageFile.path}_no_bg.png');
-      await resultImage.writeAsBytes(bytes);
-
-      setState(() {
-        _selectedImage = resultImage;
-      });
-    } else {
-      // Handle error
-      print('Failed to remove background: ${response.statusCode}');
-    }
-  }
-
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
         _selectedImage = File(pickedFile.path);
       });
-
-      // Call the remove.bg API
-      await _removeBackground(_selectedImage!);
     }
+  }
+  @override
+  void initState() {
+    super.initState();
+    _selectedImage = widget.imageFile;
   }
 
   // Save image to Hive
@@ -71,6 +48,20 @@ class _AddClothingPageState extends State<AddClothingPage> {
 
     await _wardrobeService.addClothing(clothing);
     Navigator.pop(context); // Go back to the previous screen
+  }
+
+  Future<void> _requestPermissions() async {
+    final status = await [
+      Permission.camera,
+      Permission.photos,
+      Permission.storage,
+    ].request();
+
+    // Optional: handle denial
+    if (status.values.any((element) => element.isDenied)) {
+      // Show a dialog or guide user to settings
+      print('Some permissions were denied');
+    }
   }
 
   @override
@@ -103,6 +94,14 @@ class _AddClothingPageState extends State<AddClothingPage> {
             )
                 : const Text('No image selected'),
             const SizedBox(height: 24),
+            if (_selectedImage == null) ...[
+              ElevatedButton.icon(
+              icon: const Icon(Icons.photo),
+              label: const Text('Pick from Gallery'),
+              onPressed: () => _pickImage(ImageSource.gallery),
+              ),
+            ],
+            const SizedBox(height: 12),
             ElevatedButton.icon(
               icon: const Icon(Icons.photo),
               label: const Text('Pick from Gallery'),
