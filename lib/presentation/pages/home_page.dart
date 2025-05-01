@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: AppColors.disabled,
+                      color: AppColors.searchBarComponents,
                       borderRadius: BorderRadius.circular(28),
                     ),
                     child: TextField(
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(height: 24), 
               Container(
-                color: AppColors.disabled,
+                color: AppColors.searchBarComponents,
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
@@ -107,7 +107,7 @@ class _HomePageState extends State<HomePage> {
             height: 125,
             width: 125,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color:AppColors.primary,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             child: const Center(
-              child: Icon(Icons.add, size: 32, color: Colors.black),
+              child: Icon(Icons.add, size: 32, color:AppColors.tertiary),
             ),
       );
   }
