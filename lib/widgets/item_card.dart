@@ -1,23 +1,108 @@
+// import 'package:flutter/material.dart';
+
+// class ItemCard extends StatelessWidget {
+//   final String image;
+//   final VoidCallback onTap;
+
+//   const ItemCard({super.key, required this.image, required this.onTap});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: onTap,
+//       child: Card(
+//         elevation: 4,
+//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+//         child: Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: Image.asset(image),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 import 'package:flutter/material.dart';
 
-class ItemCard extends StatelessWidget {
+class ItemCard extends StatefulWidget {
   final String image;
   final VoidCallback onTap;
+  final bool draggable;
+  final String? dragData;
 
-  const ItemCard({super.key, required this.image, required this.onTap});
+  const ItemCard({
+    super.key,
+    required this.image,
+    required this.onTap,
+    this.draggable = false,
+    this.dragData,
+  });
+
+  @override
+  State<ItemCard> createState() => _ItemCardState();
+}
+
+class _ItemCardState extends State<ItemCard> {
+  bool _isDragging = false;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
+    Widget content = AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+      transform:
+          _isDragging ? (Matrix4.identity()..scale(1.1)) : Matrix4.identity(),
+      decoration: BoxDecoration(
+        boxShadow:
+            _isDragging
+                ? [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+                : [],
+      ),
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Image.asset(image),
+          child: Image.asset(widget.image),
         ),
       ),
     );
+
+    if (widget.draggable) {
+      return LongPressDraggable<String>(
+        data: widget.dragData,
+        feedback: Material(
+          color: Colors.transparent,
+          child: SizedBox(
+            width: 100,
+            height: 100,
+            child: Image.asset(widget.image),
+          ),
+        ),
+        childWhenDragging: Opacity(opacity: 0.5, child: content),
+        onDragStarted: () {
+          setState(() {
+            _isDragging = true;
+          });
+        },
+        onDragEnd: (_) {
+          setState(() {
+            _isDragging = false;
+          });
+        },
+        child: GestureDetector(
+          onTap: widget.onTap, // ⬅️ supaya bisa klik walau draggable
+          child: content,
+        ),
+      );
+    } else {
+      return GestureDetector(onTap: widget.onTap, child: content);
+    }
   }
 }
