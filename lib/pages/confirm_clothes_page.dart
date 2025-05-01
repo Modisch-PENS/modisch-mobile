@@ -73,82 +73,88 @@ class _ConfirmClothesPageState extends State<ConfirmClothesPage> {
                     textAlign: TextAlign.center,
                   ),
                 )
-              : Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.file(
-                          File(widget.imagePath),
-                          height: 280,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      TextField(
-                        controller: _nameController,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter clothes name',
-                          border: OutlineInputBorder(),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            _clothesName = value.trim();
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 24),
-                      Wrap(
-                        spacing: 12,
-                        runSpacing: 12,
-                        children: _categories.map((category) {
-                          final isSelected = category == _selectedCategory;
-                          return ChoiceChip(
-                            label: Text(category),
-                            selected: isSelected,
-                            onSelected: (_) {
-                              setState(() {
-                                _selectedCategory = category;
-                              });
-                            },
-                          );
-                        }).toList(),
-                      ),
-                      const Spacer(),
-                      SizedBox(
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: _clothesName.isNotEmpty
-                              ? () {
-                                  widget.onSave(
-                                    _selectedCategory,
-                                    _clothesName,
-                                  );
-                                  Navigator.pop(context);
-                                }
-                              : null,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.lightBlue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),
-                            ),
-                          ),
-                          child: const Text(
-                            'Save',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
+              : SafeArea(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.only(
+                      left: 16,
+                      right: 16,
+                      top: 16,
+                      bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.file(
+                            File(widget.imagePath),
+                            height: 280,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 24),
+                        TextField(
+                          controller: _nameController,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter clothes name',
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              _clothesName = value.trim();
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                        Wrap(
+                          spacing: 12,
+                          runSpacing: 12,
+                          children: _categories.map((category) {
+                            final isSelected = category == _selectedCategory;
+                            return ChoiceChip(
+                              label: Text(category),
+                              selected: isSelected,
+                              onSelected: (_) {
+                                setState(() {
+                                  _selectedCategory = category;
+                                });
+                              },
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 32),
+                        SizedBox(
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: _clothesName.isNotEmpty
+                                ? () {
+                                    widget.onSave(
+                                      _selectedCategory,
+                                      _clothesName,
+                                    );
+                                    Navigator.pop(context);
+                                  }
+                                : null,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.lightBlue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                            ),
+                            child: const Text(
+                              'Save',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
     );
   }
 }
-
