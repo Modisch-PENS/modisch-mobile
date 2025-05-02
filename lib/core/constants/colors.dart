@@ -25,4 +25,6 @@ class AppColors {
 
   /// A color for components within the SearchBar.
   static const Color searchBarComponents = Color(0xFF79747E);
+
+  static const Color weatherBox = Color(0xFFF4F4F4);
 }

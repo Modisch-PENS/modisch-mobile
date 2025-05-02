@@ -12,7 +12,7 @@ class AppTypography {
 
   /// Returns the text style for page titles.
   static TextStyle pageTitle(BuildContext context) {
-    return Theme.of(context).textTheme.headlineMedium!.copyWith(
+    return Theme.of(context).textTheme.headlineSmall!.copyWith(
       color: AppColors.secondary,
       fontWeight: FontWeight.w500,
     );
