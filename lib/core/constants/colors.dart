@@ -13,7 +13,7 @@ class AppColors {
 
   /// A vibrant accent color (tertiary).
   /// Used for primary buttons, emphasized icons, or important interactive elements.
-  static const Color tertiary = Color(0xFF21A8DE);
+  static const Color tertiary = Color(0xFF22ACDD);
 
   /// A secondary color for text, selected buttons, and other key elements.
   /// Provides good contrast against [primary] and [background].
@@ -24,5 +24,5 @@ class AppColors {
   static const Color disabled = Color(0xFFD9D9D9);
 
   /// A color for components within the SearchBar.
-  static const Color searchBarComponents = Color(0xFFD9D9D9);
+  static const Color searchBarComponents = Color(0xFF79747E);
 }
