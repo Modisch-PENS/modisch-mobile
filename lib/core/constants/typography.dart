@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:modisch/core/constants/colors.dart';
+import 'package:modisch/constants/colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTypography {
   static TextTheme getM3TextTheme([TextTheme? base]) {
-    return Typography.material2021(
-      platform: TargetPlatform.android,
-    ).black.merge(base ?? const TextTheme());
+    final baseTheme =
+        Typography.material2021(platform: TargetPlatform.android).black;
+    final merged = baseTheme.merge(base ?? const TextTheme());
+    return GoogleFonts.poppinsTextTheme(merged);
   }
 
   /// Returns the text style for page titles.
@@ -28,6 +30,11 @@ class AppTypography {
 
   /// Returns the text style for input text placeholders.
   static TextStyle inputTextPlaceholder(BuildContext context) {
+    return getM3TextTheme(Theme.of(context).textTheme).bodyLarge!;
+  }
+
+  /// Returns the text style for homepage recent info labels.
+  static TextStyle recentInfoLabel(BuildContext context) {
     return getM3TextTheme(Theme.of(context).textTheme).bodyLarge!;
   }
 
