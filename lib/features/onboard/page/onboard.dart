@@ -1,26 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
-import 'package:modisch/constants/colors.dart';
-//import 'package:modisch/constants/typography.dart';
-import 'package:modisch/presentation/dashboard/page/dashboard.dart';
-import 'package:modisch/presentation/onboard/widget/animation.dart';
-import 'package:modisch/presentation/onboard/widget/subtitle.dart';
-import 'package:modisch/presentation/onboard/widget/title.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:modisch/core/constants/colors.dart';
+import 'package:modisch/core/routes/router_provider.dart';
+import 'package:modisch/features/onboard/riverpod/onboard_provider.dart';
+import 'package:modisch/features/onboard/widget/animation.dart';
+import 'package:modisch/features/onboard/widget/subtitle.dart';
+import 'package:modisch/features/onboard/widget/title.dart';
 
-class OnboardPage extends StatelessWidget {
+class OnboardPage extends ConsumerWidget {
   const OnboardPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return OnBoardingSlider(
       totalPage: 3,
       finishButtonText: 'Get Started',
-      onFinish: () {
-        Navigator.push(
-          context,
-          CupertinoPageRoute(builder: (context) => const DashboardPage()),
-        );
+      onFinish: () async {
+        await ref.read(setOnboardedProvider.future);
+        ref.read(routerProvider).goNamed('main');
       },
       finishButtonStyle: FinishButtonStyle(backgroundColor: AppColors.tertiary),
       skipTextButton: Text(

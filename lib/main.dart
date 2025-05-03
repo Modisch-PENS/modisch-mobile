@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:modisch/presentation/onboard/page/onboard.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -33,7 +32,6 @@ class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       title: 'Modisch',
