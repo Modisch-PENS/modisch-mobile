@@ -40,10 +40,17 @@ class _ItemCardState extends State<ItemCard> {
                 ]
                 : [],
       ),
+      // Di item_card.dart, ubah dekorasi Card:
       child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.grey.shade300),
+        ),
+        color: Color(0xFFF9F9F9),
+        child: Container(
+          width: 160,
+          height: 160,
           padding: const EdgeInsets.all(8.0),
           child: Image.asset(widget.image),
         ),

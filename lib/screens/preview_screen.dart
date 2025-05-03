@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:modisch/constants/colors.dart';
 import 'package:provider/provider.dart';
-import '../model/selected_model.dart';
-import '../widgets/top_tab.dart';
-import '../widgets/preview_select_screen.dart';
+import '/model/selected_model.dart';
+import '/widgets/top_tab.dart';
+import '/widgets/preview_select_screen.dart';
+import '/screens/model_screen.dart';
 
 class PreviewScreen extends StatefulWidget {
-  const PreviewScreen({super.key});
+  //final ModelData? modelData; // Tambahkan parameter untuk menerima data model
+  final bool reset;
+
+  // const PreviewScreen({super.key, this.modelData, this.reset = false});
+  const PreviewScreen({super.key, this.reset = false});
 
   @override
   State<PreviewScreen> createState() => _PreviewScreenState();
@@ -57,25 +63,51 @@ class _PreviewScreenState extends State<PreviewScreen> {
             color: Colors.black,
           ),
         ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder:
+                  (ctx) => AlertDialog(
+                    title: const Text('Discard Changes'),
+                    content: const Text(
+                      'Do you want to discard unsaved changes?',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(ctx),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(ctx);
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Delete'),
+                      ),
+                    ],
+                  ),
+            );
+          },
+        ),
       ),
       body: Column(
         children: [
           const SizedBox(height: 10),
-
           _buildPreviewArea(selected),
-
           const SizedBox(height: 16),
-
           // Save Button
           SizedBox(
             width: 268,
             height: 48,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF21ABDE),
+                backgroundColor: AppColors.tertiary,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(24),
                 ),
+                minimumSize: const Size(268, 48),
               ),
               onPressed: () {
                 final controller = TextEditingController();
@@ -83,10 +115,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   context: context,
                   builder:
                       (ctx) => AlertDialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        title: const Text("Save Outfit"),
+                        title: const Text('Save Outfit'),
                         content: TextField(
                           controller: controller,
                           decoration: const InputDecoration(
@@ -97,25 +126,32 @@ class _PreviewScreenState extends State<PreviewScreen> {
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(ctx),
-                            child: const Text("Cancel"),
+                            child: const Text('Cancel'),
                           ),
                           TextButton(
                             onPressed: () {
                               final name = controller.text.trim();
-                              if (name.isNotEmpty) {
-                                Provider.of<SelectedModel>(
-                                  context,
-                                  listen: false,
-                                ).saveOutfit(name);
-                                Navigator.pop(ctx);
+                              if (name.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text("Outfit '$name' saved!"),
+                                  const SnackBar(
+                                    content: Text('Please enter outfit name'),
                                   ),
                                 );
+                                return;
                               }
+                              Provider.of<SelectedModel>(
+                                context,
+                                listen: false,
+                              ).saveOutfit(name);
+                              Navigator.pop(ctx);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ModelScreen(),
+                                ),
+                              );
                             },
-                            child: const Text("Save"),
+                            child: const Text('Save'),
                           ),
                         ],
                       ),
@@ -131,27 +167,28 @@ class _PreviewScreenState extends State<PreviewScreen> {
               ),
             ),
           ),
-
           const SizedBox(height: 12),
-
-          // TOP TAB - tetap pakai klik
+          // TOP TAB
           TopTab(currentIndex: _currentIndex, onTabSelected: _onTabSelected),
-
           const SizedBox(height: 10),
-
-          // PAGE VIEW - bisa swipe geser antar kategori
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-              children:
-                  tabs.map((tab) {
-                    return PreviewSelectScreen(category: tab);
-                  }).toList(),
+          // PAGE VIEW - ubah Expanded menjadi Container dengan tinggi tetap
+          Flexible(
+            child: Container(
+              height:
+                  MediaQuery.of(context).size.height *
+                  0.4, // 40% dari tinggi layar
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                children:
+                    tabs.map((tab) {
+                      return PreviewSelectScreen(category: tab);
+                    }).toList(),
+              ),
             ),
           ),
         ],
@@ -160,86 +197,63 @@ class _PreviewScreenState extends State<PreviewScreen> {
   }
 
   Widget _buildPreviewArea(SelectedModel selected) {
-    return DragTarget<String>(
-      onAccept: (data) {
-        final selectedModel = Provider.of<SelectedModel>(
-          context,
-          listen: false,
-        );
-        bool isNone = data.startsWith('none') || data.contains('none.png');
-        String? actualImage = isNone ? null : data;
-
-        if (tabs[_currentIndex] == 'Shirt') {
-          selectedModel.selectShirt(actualImage);
-        } else if (tabs[_currentIndex] == 'Pants') {
-          selectedModel.selectPants(actualImage);
-        } else if (tabs[_currentIndex] == 'Dress') {
-          selectedModel.selectDress(actualImage);
-        } else if (tabs[_currentIndex] == 'Shoes') {
-          selectedModel.selectShoes(actualImage);
-        }
-      },
-      builder: (context, candidateData, rejectedData) {
-        return Container(
-          width: 348,
-          height: 437,
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.grey.shade100,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 10)],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // if (selected.shirt != null)
-              //   Image.asset('assets/images/${selected.shirt!}', height: 100),
-              if (selected.shirt != null)
-                GestureDetector(
-                  onTap: () => selected.selectShirt(null),
-                  child: Image.asset(
-                    'assets/images/${selected.shirt!}',
-                    height: 100,
-                  ),
-                ),
-
-              // if (selected.dress != null)
-              //   Image.asset('assets/images/${selected.dress!}', height: 120),
-              if (selected.dress != null)
-                GestureDetector(
-                  onTap: () => selected.selectDress(null),
-                  child: Image.asset(
-                    'assets/images/${selected.dress!}',
-                    height: 100,
-                  ),
-                ),
-
-              // if (selected.pants != null)
-              //   Image.asset('assets/images/${selected.pants!}', height: 100),
-              if (selected.pants != null)
-                GestureDetector(
-                  onTap: () => selected.selectPants(null),
-                  child: Image.asset(
-                    'assets/images/${selected.pants!}',
-                    height: 100,
-                  ),
-                ),
-
-              // if (selected.shoes != null)
-              //   Image.asset('assets/images/${selected.shoes!}', height: 80),
-              if (selected.shoes != null)
-                GestureDetector(
-                  onTap: () => selected.selectShoes(null),
-                  child: Image.asset(
-                    'assets/images/${selected.shoes!}',
-                    height: 100,
-                  ),
-                ),
-            ],
-          ),
-        );
-      },
+    return Container(
+      width: 348,
+      height: 437,
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 10)],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (selected.shirt != null)
+            Image.asset(
+              'assets/images/${selected.shirt!}',
+              height: 100,
+              errorBuilder: (context, error, stackTrace) {
+                return Text('Gambar tidak ditemukan: ${selected.shirt}');
+              },
+            ),
+          if (selected.dress != null)
+            Image.asset(
+              'assets/images/${selected.dress!}',
+              height: 100,
+              errorBuilder: (context, error, stackTrace) {
+                return Text('Gambar tidak ditemukan: ${selected.dress}');
+              },
+            ),
+          if (selected.pants != null)
+            Image.asset(
+              'assets/images/${selected.pants!}',
+              height: 100,
+              errorBuilder: (context, error, stackTrace) {
+                return Text('Gambar tidak ditemukan: ${selected.pants}');
+              },
+            ),
+          if (selected.shoes != null)
+            Image.asset(
+              'assets/images/${selected.shoes!}',
+              height: 100,
+              errorBuilder: (context, error, stackTrace) {
+                return Text('Gambar tidak ditemukan: ${selected.shoes}');
+              },
+            ),
+          if (selected.shirt == null &&
+              selected.dress == null &&
+              selected.pants == null &&
+              selected.shoes == null)
+            const Text('Choose your outfit',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey,
+                )),
+        ],
+      ),
     );
   }
 }

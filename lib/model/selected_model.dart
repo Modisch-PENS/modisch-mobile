@@ -82,4 +82,12 @@ class SelectedModel with ChangeNotifier {
     );
     notifyListeners();
   }
+
+  // Dalam selected_model.dart tambahkan:
+  void deleteOutfit(int index) {
+    if (index >= 0 && index < savedOutfits.length) {
+      savedOutfits.removeAt(index);
+      notifyListeners();
+    }
+  }
 }
