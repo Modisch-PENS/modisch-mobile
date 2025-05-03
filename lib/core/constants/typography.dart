@@ -49,4 +49,11 @@ class AppTypography {
   static TextStyle cardLabel(BuildContext context) {
     return getM3TextTheme(Theme.of(context).textTheme).bodySmall!;
   }
+
+  /// Returns the text style for carousel texts.
+  static TextStyle carouselText(BuildContext context) {
+    return getM3TextTheme(
+      Theme.of(context).textTheme,
+    ).titleLarge!.copyWith(fontWeight: FontWeight.w700);
+  }
 }

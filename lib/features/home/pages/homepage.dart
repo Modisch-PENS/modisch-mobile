@@ -34,7 +34,6 @@ class _HomePageState extends State<HomePage>
     super.build(context);
     return SafeArea(
       child: SingleChildScrollView(
-        // Tambahkan SingleChildScrollView di sini
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 24),
           child: Column(

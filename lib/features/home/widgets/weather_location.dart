@@ -83,7 +83,9 @@ class _WeatherLocationHeaderState extends State<WeatherLocationHeader> {
         verticalSpace(16),
         // Cuaca
         _isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(
+              child: CircularProgressIndicator(color: AppColors.tertiary),
+            )
             : SizedBox(
               height: 88,
               child: ListView.builder(
