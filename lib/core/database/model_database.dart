@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'wardrobe_database.dart';
 
 part 'model_database.g.dart';
 
