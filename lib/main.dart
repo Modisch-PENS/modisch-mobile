@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:modisch/presentation/onboard/page/onboard.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-
 import 'package:modisch/core/constants/colors.dart';
 import 'package:modisch/core/constants/typography.dart';
 import 'package:modisch/core/routes/router_provider.dart';
@@ -33,6 +33,7 @@ class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
+
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       title: 'Modisch',
