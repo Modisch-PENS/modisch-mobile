@@ -1,34 +1,15 @@
-import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:modisch/core/database/model_database.dart';
 
-class ModelClothingController with ChangeNotifier {
-  List<ModelClothing> _models = [];
-
-  List<ModelClothing> get allModels => _models;
-
-  Future<void> loadModels() async {
+class ModelClothingController {
+  Future<List<ModelClothing>> getAllModels() async {
     final box = await Hive.openBox<ModelClothing>('models');
-    _models = box.values.toList();
-    notifyListeners();
+    return box.values.toList();
   }
 
   Future<void> addModel(ModelClothing model) async {
     final box = await Hive.openBox<ModelClothing>('models');
     await box.put(model.id, model);
-    await loadModels();
-  }
-
-  Future<void> deleteModel(String id) async {
-    final box = await Hive.openBox<ModelClothing>('models');
-    await box.delete(id);
-    await loadModels();
-  }
-
-  Future<void> updateModel(String id, ModelClothing updatedModel) async {
-    final box = await Hive.openBox<ModelClothing>('models');
-    await box.put(id, updatedModel);
-    await loadModels();
   }
 
   Future<void> updateModelItem({
@@ -39,24 +20,28 @@ class ModelClothingController with ChangeNotifier {
     String? newShoesId,
   }) async {
     final box = await Hive.openBox<ModelClothing>('models');
-    final currentModel = box.get(id);
+    final existing = box.get(id);
 
-    if (currentModel != null) {
-      final updatedModel = ModelClothing(
-        id: currentModel.id,
-        shirtId: newShirtId ?? currentModel.shirtId,
-        pantsId: newPantsId ?? currentModel.pantsId,
-        dressId: newDressId ?? currentModel.dressId,
-        shoesId: newShoesId ?? currentModel.shoesId,
-        createdAt: currentModel.createdAt,
+    if (existing != null) {
+      final updated = ModelClothing(
+        id: existing.id,
+        shirtId: newShirtId ?? existing.shirtId,
+        pantsId: newPantsId ?? existing.pantsId,
+        dressId: newDressId ?? existing.dressId,
+        shoesId: newShoesId ?? existing.shoesId,
+        createdAt: existing.createdAt,
       );
-
-      await box.put(id, updatedModel);
-      await loadModels();
+      await box.put(id, updated);
     }
   }
 
-  ModelClothing? getModelById(String id) {
-    return _models.firstWhere((model) => model.id == id);
+  Future<void> deleteModel(String id) async {
+    final box = await Hive.openBox<ModelClothing>('models');
+    await box.delete(id);
+  }
+
+  Future<ModelClothing?> getModelById(String id) async {
+    final box = await Hive.openBox<ModelClothing>('models');
+    return box.get(id);
   }
 }
