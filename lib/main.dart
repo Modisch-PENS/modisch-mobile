@@ -1,22 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:modisch/constants/typography.dart';
 import 'package:modisch/presentation/onboard/page/onboard.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:modisch/core/constants/colors.dart';
+import 'package:modisch/core/constants/typography.dart';
+import 'package:modisch/core/routes/router_provider.dart';
+import 'package:modisch/core/database/wardrobe_database.dart';
+import 'package:modisch/core/database/model_database.dart';
 
-import 'constants/colors.dart';
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-void main() {
-  runApp(const MyApp());
+  await dotenv.load(fileName: ".env");
+
+  final appDir = await getApplicationDocumentsDirectory();
+  await Hive.initFlutter(appDir.path);
+
+  // Register Hive adapters
+  Hive.registerAdapter(ClothingModelAdapter());
+  Hive.registerAdapter(ModelClothingAdapter());
+
+  // Open boxes
+  await Hive.openBox<ClothingModel>('clothing');
+  await Hive.openBox<ModelClothing>('models');
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
+
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp.router(
+      title: 'Modisch',
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.light(
@@ -27,7 +47,8 @@ class MyApp extends StatelessWidget {
         ),
         textTheme: AppTypography.getM3TextTheme(),
       ),
-      home: const OnboardPage(),
+      debugShowCheckedModeBanner: false,
+      routerConfig: ref.watch(routerProvider),
     );
   }
 }
