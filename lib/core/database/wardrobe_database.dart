@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-part 'clothing_model.g.dart';
+part 'wardrobe_database.g.dart';
 
 @HiveType(typeId: 0)
 class ClothingModel extends HiveObject {

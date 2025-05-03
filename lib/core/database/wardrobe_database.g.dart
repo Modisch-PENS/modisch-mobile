@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'clothing_model.dart';
+part of 'wardrobe_database.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
