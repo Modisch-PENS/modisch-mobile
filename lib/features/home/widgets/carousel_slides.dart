@@ -45,16 +45,36 @@ List<Widget> _buildImageSliders(BuildContext context) {
         borderRadius: BorderRadius.all(Radius.circular(5.0)),
         child: Row(
           children: [
-            Flexible(
+            Expanded(
+              flex: 3,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 32),
+                padding: const EdgeInsets.symmetric(horizontal: 32),
                 child: Text(
                   item['text']!,
                   style: AppTypography.carouselText(context),
                 ),
               ),
             ),
-            Image.asset(item['image']!),
+            Expanded(
+              flex: 2,
+              child: AspectRatio(
+                aspectRatio: 2 / 3,
+                child: Image.asset(
+                  item['image']!,
+                  fit: BoxFit.cover,
+                  frameBuilder: (context, child, frame, _) {
+                    if (frame == null) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.disabled,
+                        ),
+                      );
+                    }
+                    return child;
+                  },
+                ),
+              ),
+            ),
           ],
         ),
       ),

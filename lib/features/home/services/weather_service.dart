@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// Model untuk data cuaca
 class WeatherData {
   final String dayName;
   final String date;
@@ -24,18 +23,25 @@ class WeatherData {
   });
 }
 
-// Service untuk lokasi
-// Service untuk cuaca
 class WeatherService {
+  SharedPreferencesWithCache? _prefs;
+
+  Future<void> init() async {
+    _prefs ??= await SharedPreferencesWithCache.create(
+      cacheOptions: const SharedPreferencesWithCacheOptions(
+        allowList: <String>{'weather_cache', 'weather_cache_date'},
+      ),
+    );
+  }
+
   Future<List<WeatherData>> getWeatherForecast(
     double latitude,
     double longitude,
   ) async {
     final now = DateTime.now();
-    final prefs = await SharedPreferences.getInstance();
 
-    final cachedJson = prefs.getString('weather_cache');
-    final cachedDate = prefs.getString('weather_cache_date');
+    final cachedJson = _prefs?.getString('weather_cache');
+    final cachedDate = _prefs?.getString('weather_cache_date');
 
     // Cek apakah cache valid
     if (cachedJson != null && cachedDate != null) {
@@ -169,8 +175,8 @@ class WeatherService {
                   },
                 )
                 .toList();
-        prefs.setString('weather_cache', json.encode(jsonToCache));
-        prefs.setString('weather_cache_date', now.toIso8601String());
+        _prefs?.setString('weather_cache', json.encode(jsonToCache));
+        _prefs?.setString('weather_cache_date', now.toIso8601String());
         return weatherData;
       } else {
         throw Exception('Failed to load weather data');
