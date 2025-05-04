@@ -9,6 +9,8 @@ import 'package:modisch/core/routes/router_provider.dart';
 import 'package:modisch/core/database/wardrobe_database.dart';
 import 'package:modisch/core/database/model_database.dart';
 
+final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
+  
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
