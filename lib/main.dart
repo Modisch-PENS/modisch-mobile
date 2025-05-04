@@ -6,8 +6,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:modisch/core/constants/colors.dart';
 import 'package:modisch/core/constants/typography.dart';
 import 'package:modisch/core/routes/router_provider.dart';
-import 'package:modisch/core/database/wardrobe_database.dart';
-import 'package:modisch/core/database/model_database.dart';
+import 'package:modisch/core/database/models/wardrobe_database.dart';
+import 'package:modisch/core/database/models/model_database.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

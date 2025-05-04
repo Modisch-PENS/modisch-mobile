@@ -1,29 +1,36 @@
-import 'package:modisch/core/constants/typography.dart';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modisch/core/constants/colors.dart';
 import 'package:modisch/core/constants/spacing.dart';
-import 'package:flutter/material.dart';
+import 'package:modisch/core/constants/typography.dart';
+import 'package:modisch/core/database/models/wardrobe_database.dart';
+import 'package:modisch/features/wardrobe/riverpod/wardrobe_provider.dart';
 
-class RecentInfo extends StatelessWidget {
+class RecentInfo extends ConsumerWidget {
   final String title;
-  final List<String> imageAssets;
 
-  const RecentInfo({super.key, required this.title, required this.imageAssets});
+  const RecentInfo({super.key, required this.title});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Get recent items from the wardrobe provider
+    final recentItems = ref.watch(recentClothingProvider(limit: 10));
+
+    // If there are no items, show empty state
+    if (recentItems.isEmpty) {
+      return Column(
+        children: [
+          _buildHeader(context),
+          verticalSpace(16),
+          _buildEmptyState(context),
+        ],
+      );
+    }
+
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Recent $title',
-              style: AppTypography.recentInfoLabel(context),
-              textAlign: TextAlign.start,
-            ),
-          ),
-        ),
+        _buildHeader(context),
         verticalSpace(16),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -31,85 +38,66 @@ class RecentInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               horizontalSpace(24),
-              ...imageAssets.asMap().entries.map((entry) {
-                final isLast = entry.key == imageAssets.length - 1;
+              ...recentItems.asMap().entries.map((entry) {
+                final isLast = entry.key == recentItems.length - 1;
                 return Padding(
-                  padding: EdgeInsets.only(right: isLast ? 0 : 16),
-                  child: _ListItem(
-                    imagePath: imageAssets[entry.key],
-                    itemName: _getItemName(imageAssets[entry.key]),
-                  ),
+                  padding: EdgeInsets.only(right: isLast ? 24 : 16),
+                  child: _ClothingListItem(clothing: recentItems[entry.key]),
                 );
               }),
-              horizontalSpace(24),
             ],
           ),
         ),
-        // HorizontalScrollView.builder(
-        //   itemWidth: 125, // Width matching the image width
-        //   crossAxisSpacing: 16, // Spacing between items in the same row.
-        //   alignment:
-        //       CrossAxisAlignment.center, // Alignment of items within the row
-        //   itemCount: imageAssets.length, // Total number of items in the list.
-        //   itemBuilder: (BuildContext context, int index) {
-        //     return _ListItem(
-        //       imagePath: imageAssets[index],
-        //       itemName: _getItemName(imageAssets[index]),
-        //     );
-        //   },
-        // ),
-        // Kosongan ///
-        // Row(
-        //   children: [
-        //     Container(
-        //       decoration: BoxDecoration(
-        //         color: AppColors.background,
-        //         borderRadius: BorderRadius.circular(20),
-        //         border: Border.all(color: AppColors.disabled, width: 1),
-        //       ),
-        //       child: SizedBox(
-        //         height: 125,
-        //         width: 125,
-        //         child: Padding(
-        //           padding: EdgeInsets.all(16),
-        //           child: Center(
-        //             child: Text(
-        //               'No $title added yet',
-        //               style: TextStyle(color: AppColors.disabled),
-        //               textAlign: TextAlign.center,
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ),
       ],
     );
   }
 
-  // Helper method to extract item name from file path
-  String _getItemName(String path) {
-    // Extract filename from path and remove extension
-    String fileName = path.split('/').last;
-    // Remove extension
-    String nameWithoutExtension = fileName.split('.').first;
-    // Replace underscores with spaces and capitalize each word
-    List<String> words = nameWithoutExtension.split('_');
-    if (words.length >= 2) {
-      // Skip the first word if it's "shirt" to get only the color/style
-      String colorOrStyle = words.sublist(1).join(' ');
-      return '${words[0]} ${colorOrStyle}'.trim();
-    }
-    return nameWithoutExtension.replaceAll('_', ' ');
+  Widget _buildHeader(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          'Recent $title',
+          style: AppTypography.recentInfoLabel(context),
+          textAlign: TextAlign.start,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.background,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.disabled, width: 1),
+        ),
+        child: SizedBox(
+          height: 125,
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Center(
+              child: Text(
+                'No $title added yet',
+                style: TextStyle(color: AppColors.disabled),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
-class _ListItem extends StatelessWidget {
-  final String imagePath;
-  final String itemName;
+class _ClothingListItem extends StatelessWidget {
+  final ClothingModel clothing;
 
-  const _ListItem({super.key, required this.imagePath, required this.itemName});
+  const _ClothingListItem({required this.clothing});
 
   @override
   Widget build(BuildContext context) {
@@ -125,16 +113,25 @@ class _ListItem extends StatelessWidget {
           child: SizedBox(
             height: 125,
             width: 125,
-
-            child: Image.asset(imagePath, fit: BoxFit.cover),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.file(
+                File(clothing.imagePath),
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Center(
+                    child: Icon(Icons.broken_image, color: AppColors.disabled),
+                  );
+                },
+              ),
+            ),
           ),
         ),
-        const SizedBox(height: 2),
+        const SizedBox(height: 4),
         SizedBox(
-          width:
-              125, // Match the image width instead of using ratio calculation
+          width: 125,
           child: Text(
-            itemName,
+            clothing.name,
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
             style: AppTypography.cardLabel(context),

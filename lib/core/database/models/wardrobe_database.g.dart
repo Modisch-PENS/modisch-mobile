@@ -20,19 +20,22 @@ class ClothingModelAdapter extends TypeAdapter<ClothingModel> {
       id: fields[0] as String,
       category: fields[1] as String,
       imagePath: fields[2] as String,
+      name: fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, ClothingModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.category)
       ..writeByte(2)
-      ..write(obj.imagePath);
+      ..write(obj.imagePath)
+      ..writeByte(3)
+      ..write(obj.name);
   }
 
   @override

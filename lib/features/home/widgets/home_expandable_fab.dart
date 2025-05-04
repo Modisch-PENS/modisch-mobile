@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:modisch/core/constants/colors.dart';
 import 'package:modisch/core/constants/typography.dart';
 
@@ -16,7 +17,7 @@ class CustomExpandableFab extends StatelessWidget {
       duration: const Duration(milliseconds: 250),
       openButtonBuilder: RotateFloatingActionButtonBuilder(
         child: const Icon(Icons.add),
-        fabSize: ExpandableFabSize.regular,
+        fabSize: ExpandableFabSize.large,
         foregroundColor: Colors.white,
         backgroundColor: AppColors.tertiary,
         shape: const CircleBorder(),
@@ -30,7 +31,7 @@ class CustomExpandableFab extends StatelessWidget {
       ),
       overlayStyle: ExpandableFabOverlayStyle(
         blur: 5.0, // Blur effect strength
-        color: Colors.white.withValues(alpha: 0.5),
+        color: Colors.white.withOpacity(0.5),
       ),
       children: [
         SizedBox(
@@ -41,7 +42,7 @@ class CustomExpandableFab extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(50),
             ),
-            onPressed: () => Navigator.pushNamed(context, '/image_picker'),
+            onPressed: () => context.goNamed('camera_picker'),
             icon: const FaIcon(
               FontAwesomeIcons.camera,
               size: 16,
@@ -59,7 +60,8 @@ class CustomExpandableFab extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(50),
             ),
-            onPressed: () => Navigator.pushNamed(context, '/make_model'),
+            onPressed:
+                () => context.goNamed('main', extra: {'openModel': true}),
             icon: const FaIcon(
               FontAwesomeIcons.shirt,
               size: 16,

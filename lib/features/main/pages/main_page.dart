@@ -1,53 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modisch/core/constants/colors.dart';
 import 'package:modisch/features/home/pages/homepage.dart';
-import 'package:modisch/features/main/widgets/expanding_fab.dart';
+import 'package:modisch/features/main/riverpod/main_page_provider.dart';
+import 'package:modisch/features/home/widgets/home_expandable_fab.dart';
 import 'package:modisch/features/model/pages/model_page.dart';
+import 'package:modisch/features/model/widgets/model_expandable_fab.dart'; 
 import 'package:modisch/features/wardrobe/pages/wardrobe_page.dart';
+import 'package:modisch/features/wardrobe/widgets/wardrobe_expandable_fab.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
-class MainPage extends StatefulWidget {
+class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  ConsumerState<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
-  int selectedPage = 0;
+class _MainPageState extends ConsumerState<MainPage> {
   final PageController pageController = PageController();
 
-  // @override
-  // void dispose() {
-  //   pageController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
+  final Map<MainPageTab, Widget> _fabMap = {
+    MainPageTab.home: const CustomExpandableFab(),
+    MainPageTab.wardrobe: const WardrobeExpandableFab(),
+    MainPageTab.model: const ModelExpandableFab(),
+  };
 
   @override
   Widget build(BuildContext context) {
+    final mainPageState = ref.watch(mainPageNotifierProvider);
+    final selectedPage = mainPageState.index;
+
     return Scaffold(
-      body: Stack(
-        children: [
-          PageView(
-            controller: pageController,
-            onPageChanged:
-                (value) => setState(() {
-                  selectedPage = value;
-                }),
-            children: const [
-              Center(child: HomePage(title: 'HomePage')),
-              Center(child: WardrobePage()),
-              Center(child: ModelPage()),
-            ],
-          ),
+      body: PageView(
+        controller: pageController,
+        onPageChanged: (index) {
+          ref.read(mainPageNotifierProvider.notifier).changePageToIndex(index);
+        },
+        children: const [
+          Center(child: HomePage()),
+          Center(child: WardrobePage()),
+          Center(child: ModelPage()),
         ],
       ),
       floatingActionButtonLocation: ExpandableFab.location,
-      floatingActionButton: const CustomExpandableFab(),
+      floatingActionButton: Stack(
+        alignment: Alignment.bottomRight,
+        children: _fabMap.entries.map((entry) {
+          return Visibility(
+            visible: mainPageState == entry.key,
+            maintainState: true, 
+            maintainAnimation: true,
+            maintainSize: true,
+            child: entry.value,
+          );
+        }).toList(),
+      ),
       bottomNavigationBar: StylishBottomBar(
         option: AnimatedBarOptions(
-          // Set to simple icon style
           barAnimation: BarAnimation.blink,
           iconStyle: IconStyle.animated,
         ),
@@ -58,11 +75,9 @@ class _MainPageState extends State<MainPage> {
             title: Text(
               'Home',
               style: TextStyle(
-                color:
-                    selectedPage == 0
-                        ? AppColors.secondary
-                        : AppColors.disabled,
-
+                color: selectedPage == 0
+                    ? AppColors.secondary
+                    : AppColors.disabled,
                 fontSize: 12,
               ),
             ),
@@ -77,10 +92,9 @@ class _MainPageState extends State<MainPage> {
             title: Text(
               'Wardrobe',
               style: TextStyle(
-                color:
-                    selectedPage == 1
-                        ? AppColors.secondary
-                        : AppColors.disabled,
+                color: selectedPage == 1
+                    ? AppColors.secondary
+                    : AppColors.disabled,
                 fontSize: 12,
               ),
             ),
@@ -98,10 +112,9 @@ class _MainPageState extends State<MainPage> {
             title: Text(
               'Model',
               style: TextStyle(
-                color:
-                    selectedPage == 2
-                        ? AppColors.secondary
-                        : AppColors.disabled,
+                color: selectedPage == 2
+                    ? AppColors.secondary
+                    : AppColors.disabled,
                 fontSize: 12,
               ),
             ),
@@ -111,15 +124,7 @@ class _MainPageState extends State<MainPage> {
         currentIndex: selectedPage,
         onTap: (index) {
           pageController.jumpToPage(index);
-          setState(() {
-            selectedPage = index;
-          });
-
-          // pageController.animateToPage(
-          //   index,
-          //   duration: const Duration(milliseconds: 200),
-          //   curve: Curves.easeInOut,
-          // );
+          ref.read(mainPageNotifierProvider.notifier).changePageToIndex(index);
         },
       ),
     );
