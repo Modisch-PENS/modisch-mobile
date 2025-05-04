@@ -8,7 +8,7 @@ import 'package:modisch/core/constants/typography.dart';
 import 'package:modisch/core/routes/router_provider.dart';
 import 'package:modisch/core/database/wardrobe_database.dart';
 import 'package:modisch/core/database/model_database.dart';
-  
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -36,8 +36,14 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Modisch',
       theme: ThemeData(
-        primarySwatch: Colors.blue, //nanti tolong ganti ke Tertiary
         useMaterial3: true,
+        colorScheme: ColorScheme.light(
+          primary: AppColors.primary,
+          surface: AppColors.background,
+          secondary: AppColors.secondary,
+          tertiary: AppColors.tertiary,
+        ),
+        textTheme: AppTypography.getM3TextTheme(),
       ),
       debugShowCheckedModeBanner: false,
       routerConfig: ref.watch(routerProvider),
