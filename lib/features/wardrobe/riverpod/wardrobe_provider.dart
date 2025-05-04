@@ -18,7 +18,7 @@ class WardrobeNotifier extends _$WardrobeNotifier {
   // Add a new clothing item
   Future<void> addClothingItem({
     required String id,
-    required String category, 
+    required String category,
     required String imagePath,
     required String name,
   }) async {
@@ -29,18 +29,27 @@ class WardrobeNotifier extends _$WardrobeNotifier {
       imagePath: imagePath,
       name: name,
     );
-    
+
     // Save to Hive
     await _clothingBox.put(id, model);
-    
+
     // Update state
     state = AsyncData([..._clothingBox.values.toList()]);
   }
-  
+
+  // Update a clothing item
+  Future<void> updateClothingItem(ClothingModel item) async {
+    // Save to Hive
+    await _clothingBox.put(item.id, item);
+
+    // Update state
+    state = AsyncData([..._clothingBox.values.toList()]);
+  }
+
   // Delete clothing item
   Future<void> deleteClothingItem(String id) async {
     final item = _clothingBox.get(id);
-    
+
     // Delete file if it exists
     if (item != null) {
       final file = File(item.imagePath);
@@ -48,20 +57,20 @@ class WardrobeNotifier extends _$WardrobeNotifier {
         await file.delete();
       }
     }
-    
+
     // Remove from Hive
     await _clothingBox.delete(id);
-    
+
     // Update state
     state = AsyncData([..._clothingBox.values.toList()]);
   }
-  
+
   // Get items by category
   List<ClothingModel> getItemsByCategory(String category) {
     if (state.value == null) return [];
     return state.value!.where((item) => item.category == category).toList();
   }
-  
+
   // Get recently added items
   List<ClothingModel> getRecentItems({int limit = 10}) {
     if (state.value == null) return [];
@@ -75,7 +84,7 @@ class WardrobeNotifier extends _$WardrobeNotifier {
 // Filtered clothing provider
 @riverpod
 List<ClothingModel> clothingByCategory(
-  ClothingByCategoryRef ref, 
+  ClothingByCategoryRef ref,
   String category,
 ) {
   final wardrobeState = ref.watch(wardrobeNotifierProvider);
@@ -88,10 +97,7 @@ List<ClothingModel> clothingByCategory(
 
 // Recent clothing provider
 @riverpod
-List<ClothingModel> recentClothing(
-  RecentClothingRef ref, 
-  {int limit = 10}
-) {
+List<ClothingModel> recentClothing(RecentClothingRef ref, {int limit = 10}) {
   final wardrobeState = ref.watch(wardrobeNotifierProvider);
   return wardrobeState.when(
     data: (items) {

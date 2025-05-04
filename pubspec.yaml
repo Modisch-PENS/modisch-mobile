@@ -54,6 +54,9 @@ flutter:
     - assets/onboard/
     - assets/images/aldino.jpg
     - assets/clothes/shirt/
+    - assets/clothes/dress/
+    - assets/clothes/shoes/
+    - assets/clothes/pants/
     - assets/carousel/
     #   - images/a_dot_ham.jpeg
     - .env

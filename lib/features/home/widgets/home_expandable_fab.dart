@@ -17,7 +17,7 @@ class CustomExpandableFab extends StatelessWidget {
       duration: const Duration(milliseconds: 250),
       openButtonBuilder: RotateFloatingActionButtonBuilder(
         child: const Icon(Icons.add),
-        fabSize: ExpandableFabSize.large,
+        fabSize: ExpandableFabSize.regular,
         foregroundColor: Colors.white,
         backgroundColor: AppColors.tertiary,
         shape: const CircleBorder(),

@@ -124,7 +124,7 @@ class _ConfirmClothesPageState extends ConsumerState<ConfirmClothesPage> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.secondary),
-          onPressed: () => context.goNamed('main'),
+          onPressed: () => context.goNamed('wardrobe'),
         ),
         title: Text(
           'Confirm Your Clothes',
