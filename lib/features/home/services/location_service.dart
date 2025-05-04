@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -8,10 +7,14 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocationService {
-  SharedPreferences? _prefs;
+  SharedPreferencesWithCache? _prefs;
 
   Future<void> init() async {
-    _prefs ??= await SharedPreferences.getInstance();
+    _prefs ??= await SharedPreferencesWithCache.create(
+      cacheOptions: const SharedPreferencesWithCacheOptions(
+        allowList: <String>{'cached_city_names'},
+      ),
+    );
   }
 
   Future<Position?> getCurrentLocation() async {
@@ -33,12 +36,12 @@ class LocationService {
   }
 
   Future<String> getCityName(double latitude, double longitude) async {
-    await init(); // pastikan prefs terinisialisasi
+    await init();
 
     final key =
         '${latitude.toStringAsFixed(4)},${longitude.toStringAsFixed(4)}';
-
     final cacheData = _prefs?.getString('cached_city_names');
+
     Map<String, dynamic> cacheMap =
         cacheData != null ? json.decode(cacheData) : {};
 
@@ -60,7 +63,6 @@ class LocationService {
         if (data.isNotEmpty) {
           final cityName = data[0]['name'];
           cacheMap[key] = cityName;
-
           _prefs?.setString('cached_city_names', json.encode(cacheMap));
           return cityName;
         }

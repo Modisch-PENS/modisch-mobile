@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modisch/core/constants/colors.dart';
+import 'package:modisch/core/constants/spacing.dart';
 import 'package:modisch/features/home/services/weather_service.dart';
 
 class WeatherBox extends StatelessWidget {
@@ -17,7 +18,7 @@ class WeatherBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 16.0),
+        padding: const EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -37,7 +38,7 @@ class WeatherBox extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            verticalSpace(16),
             Row(
               children: [
                 Text(
@@ -47,7 +48,7 @@ class WeatherBox extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(width: 16),
+                horizontalSpace(24),
                 _getWeatherIcon(weatherData.condition),
               ],
             ),
@@ -77,6 +78,6 @@ class WeatherBox extends StatelessWidget {
         iconData = Icons.cloud;
     }
 
-    return Icon(iconData, size: 20, color: AppColors.secondary);
+    return Icon(iconData, size: 24, color: AppColors.secondary);
   }
 }
