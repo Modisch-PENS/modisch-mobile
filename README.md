@@ -11,7 +11,7 @@ Secara default, perintah ini akan mengclone branch development.
 ### 2. Buat Branch Baru
 Buatlah branch baru sesuai dengan fitur/modul yang akan dikerjakan:
 ```bash
-git checkout -b nama_branch
+git switch -c nama_branch
 ```
 Penamaan branch sebaiknya deskriptif sesuai dengan fitur yang dikerjakan.
 
