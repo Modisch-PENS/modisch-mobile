@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:modisch/core/database/model_database.dart';
+import 'package:modisch/core/database/models/outfit_model_database.dart';
 
 class ModelClothingController {
   Future<List<ModelClothing>> getAllModels() async {

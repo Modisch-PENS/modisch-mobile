@@ -56,4 +56,8 @@ class AppTypography {
       Theme.of(context).textTheme,
     ).titleLarge!.copyWith(fontWeight: FontWeight.w700);
   }
+
+  static TextStyle errorText(BuildContext context) {
+    return getM3TextTheme(Theme.of(context).textTheme).bodySmall!.copyWith(color: Colors.red);
+  }
 }
