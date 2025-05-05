@@ -279,14 +279,12 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
                 ),
             ],
           ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+          body: Column(
             children: [
               const SizedBox(height: 10),
               const OutfitPreview(),
               const SizedBox(height: 16),
+              // Save Button
               SizedBox(
                 width: 268,
                 height: 48,
@@ -296,42 +294,43 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
+                  ),
+                  onPressed: _saveOutfit,
+                  child: const Text(
+                    "Save",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
-                    onPressed: _saveOutfit,
-                    child: const Text(
-                      "Save",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
+              // Tab Bar
               TopTabBar(
-                currentIndex: _currentTabIndex, 
-                onTabSelected: _onTabSelected, 
+                currentIndex: _currentTabIndex,
+                onTabSelected: _onTabSelected,
                 tabs: _categories,
+              ),
+              const SizedBox(height: 10),
+              // PageView for categories
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentTabIndex = index;
+                    });
+                  },
+                  children:
+                      _categories.map((category) {
+                        return ItemCategoryScreen(category: category);
+                      }).toList(),
                 ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height *0.5,
-                  child: PageView(
-                    controller: _pageController,
-                    onPageChanged: (index){
-                      setState(() {
-                        _currentTabIndex = index;
-                      });
-                    },
-                    children: _categories
-                      .map((category) => ItemCategoryScreen(category: category))
-                      .toList(),
-                  ),
-                )
+              ),
             ],
           ),
-        ),
         ),
       ),
     );
