@@ -179,7 +179,7 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               final name = controller.text.trim();
               if (name.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
