@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:modisch/core/constants/colors.dart';
 import 'package:modisch/core/constants/typography.dart';
 import 'package:modisch/core/database/models/outfit_model_database.dart';
+import 'package:modisch/features/main/riverpod/main_page_provider.dart';
 import 'package:modisch/features/model/providers/outfit_provider.dart';
 import 'package:modisch/features/model/widgets/item_category_screen.dart';
 import 'package:modisch/features/model/widgets/outfit_preview.dart';
@@ -12,10 +13,7 @@ import 'package:modisch/features/model/widgets/top_tab_bar.dart';
 class OutfitEditorPage extends ConsumerStatefulWidget {
   final String? outfitId;
 
-  const OutfitEditorPage({
-    super.key,
-    this.outfitId,
-  });
+  const OutfitEditorPage({super.key, this.outfitId});
 
   @override
   ConsumerState<OutfitEditorPage> createState() => _OutfitEditorPageState();
@@ -26,26 +24,26 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
   late PageController _pageController;
   final List<String> _categories = ['Shirt', 'Pants', 'Dress', 'Shoes'];
   bool _isEditing = false;
-  
+
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentTabIndex);
     _loadOutfit();
   }
-  
+
   Future<void> _loadOutfit() async {
     if (widget.outfitId != null) {
       // Edit existing outfit
       setState(() => _isEditing = true);
-      
+
       // Use outfit notifier to get outfit by ID
       final outfitsState = await ref.read(outfitNotifierProvider.future);
       final outfit = outfitsState.firstWhere(
         (o) => o.id == widget.outfitId,
         orElse: () => OutfitModel.empty(),
       );
-      
+
       // Load into editor
       if (outfit.id.isNotEmpty) {
         ref.read(outfitEditorNotifierProvider.notifier).loadOutfit(outfit);
@@ -72,7 +70,14 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
       curve: Curves.easeInOut,
     );
   }
-  
+
+  void _navigateToModelTab() {
+    // Set the MainPageNotifier to show the model tab
+    ref.read(mainPageNotifierProvider.notifier).changePageToTab(MainPageTab.model);
+    // Navigate to main page, replacing the current screen
+    context.goNamed('main');
+  }
+
   void _discardChanges() {
     showDialog(
       context: context,
@@ -87,7 +92,7 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
-              context.pop();
+              _navigateToModelTab();
             },
             child: const Text(
               'Discard',
@@ -98,10 +103,48 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
       ),
     );
   }
-  
+
+  void _saveOutfitAndNavigate(BuildContext dialogContext, String name) async {
+    final editorState = ref.read(outfitEditorNotifierProvider);
+    final outfitNotifier = ref.read(outfitNotifierProvider.notifier);
+
+    if (_isEditing && widget.outfitId != null) {
+      // Update existing outfit
+      final outfit = editorState.copyWith(
+        id: widget.outfitId!,
+        name: name,
+      );
+      await outfitNotifier.updateOutfit(outfit);
+    } else {
+      // Add new outfit
+      await outfitNotifier.addOutfit(
+        name: name,
+        shirt: editorState.shirt,
+        pants: editorState.pants,
+        dress: editorState.dress,
+        shoes: editorState.shoes,
+      );
+    }
+
+    // First close the dialog
+    if (mounted) {
+      Navigator.pop(dialogContext);
+      
+      // Then set the tab and navigate
+      ref.read(mainPageNotifierProvider.notifier).changePageToTab(MainPageTab.model);
+      
+      // Short delay to ensure dialog is fully closed
+      Future.microtask(() {
+        if (mounted) {
+          context.goNamed('main');
+        }
+      });
+    }
+  }
+
   void _saveOutfit() {
     final editorState = ref.read(outfitEditorNotifierProvider);
-    
+
     // Check if outfit has any items
     if (!ref.read(outfitEditorNotifierProvider.notifier).isReadyToSave) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -112,12 +155,12 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
       );
       return;
     }
-    
+
     // Show name input dialog
     final controller = TextEditingController(
       text: _isEditing ? editorState.name : '',
     );
-    
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -136,7 +179,7 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () async {
+            onPressed: () {
               final name = controller.text.trim();
               if (name.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -147,33 +190,12 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
                 );
                 return;
               }
-              
-              final outfitNotifier = ref.read(outfitNotifierProvider.notifier);
-              
-              if (_isEditing && widget.outfitId != null) {
-                // Update existing outfit
-                final outfit = editorState.copyWith(
-                  id: widget.outfitId!,
-                  name: name,
-                );
-                await outfitNotifier.updateOutfit(outfit);
-              } else {
-                // Add new outfit
-                await outfitNotifier.addOutfit(
-                  name: name,
-                  shirt: editorState.shirt,
-                  pants: editorState.pants,
-                  dress: editorState.dress,
-                  shoes: editorState.shoes,
-                );
-              }
-              
-              if (mounted) {
-                Navigator.pop(ctx);
-                context.pop();
-              }
+              _saveOutfitAndNavigate(ctx, name);
             },
-            child: const Text('Save', style: TextStyle(color: AppColors.tertiary),),
+            child: const Text(
+              'Save',
+              style: TextStyle(color: AppColors.tertiary),
+            ),
           ),
         ],
       ),
@@ -182,71 +204,78 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return WillPopScope(
+      // Handle back button press
+      onWillPop: () async {
+        _discardChanges();
+        return false; // Prevent default back navigation
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          _isEditing ? 'Edit Outfit' : 'Create Outfit',
-          style: AppTypography.pageTitle(context),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            _isEditing ? 'Edit Outfit' : 'Create Outfit',
+            style: AppTypography.pageTitle(context),
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: AppColors.secondary),
+            onPressed: _discardChanges,
+          ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.secondary),
-          onPressed: _discardChanges,
-        ),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 10),
-          const OutfitPreview(),
-          const SizedBox(height: 16),
-          // Save Button
-          SizedBox(
-            width: 268,
-            height: 48,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.tertiary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
+        body: Column(
+          children: [
+            const SizedBox(height: 10),
+            const OutfitPreview(),
+            const SizedBox(height: 16),
+            // Save Button
+            SizedBox(
+              width: 268,
+              height: 48,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.tertiary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
                 ),
-              ),
-              onPressed: _saveOutfit,
-              child: const Text(
-                "Save",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                onPressed: _saveOutfit,
+                child: const Text(
+                  "Save",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 12),
-          // Tab Bar
-          TopTabBar(
-            currentIndex: _currentTabIndex,
-            onTabSelected: _onTabSelected,
-            tabs: _categories,
-          ),
-          const SizedBox(height: 10),
-          // PageView for categories
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentTabIndex = index;
-                });
-              },
-              children: _categories.map((category) {
-                return ItemCategoryScreen(category: category);
-              }).toList(),
+            const SizedBox(height: 12),
+            // Tab Bar
+            TopTabBar(
+              currentIndex: _currentTabIndex,
+              onTabSelected: _onTabSelected,
+              tabs: _categories,
             ),
-          ),
-        ],
+            const SizedBox(height: 10),
+            // PageView for categories
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentTabIndex = index;
+                  });
+                },
+                children: _categories.map((category) {
+                  return ItemCategoryScreen(category: category);
+                }).toList(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
