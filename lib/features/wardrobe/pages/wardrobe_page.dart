@@ -37,6 +37,7 @@ class _WardrobePageState extends ConsumerState<WardrobePage> with AutomaticKeepA
       child: Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(
+          centerTitle: true,
           backgroundColor: AppColors.primary,
           elevation: 1,
           title: Text('Wardrobe', style: AppTypography.pageTitle(context)),
