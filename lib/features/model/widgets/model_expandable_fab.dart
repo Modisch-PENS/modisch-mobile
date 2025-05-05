@@ -42,31 +42,13 @@ class ModelExpandableFab extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(50),
             ),
-            onPressed: () => context.goNamed('create_model'),
+            onPressed: () => context.goNamed('outfit_editor_new'),
             icon: const FaIcon(
               FontAwesomeIcons.pen,
               size: 16,
               color: AppColors.secondary,
             ),
             label: Text('Create Model', style: AppTypography.cardLabel(context)),
-          ),
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          width: 150,
-          child: FloatingActionButton.extended(
-            heroTag: 'view_models',
-            backgroundColor: AppColors.primary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(50),
-            ),
-            onPressed: () => context.goNamed('view_models'),
-            icon: const FaIcon(
-              FontAwesomeIcons.eye,
-              size: 16,
-              color: AppColors.secondary,
-            ),
-            label: Text('View Models', style: AppTypography.cardLabel(context)),
           ),
         ),
       ],

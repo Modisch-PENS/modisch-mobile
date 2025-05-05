@@ -1,46 +1,49 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'model_database.dart';
+part of 'outfit_model_database.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ModelClothingAdapter extends TypeAdapter<ModelClothing> {
+class OutfitModelAdapter extends TypeAdapter<OutfitModel> {
   @override
   final int typeId = 1;
 
   @override
-  ModelClothing read(BinaryReader reader) {
+  OutfitModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ModelClothing(
+    return OutfitModel(
       id: fields[0] as String,
-      shirtId: fields[1] as String?,
-      pantsId: fields[2] as String?,
-      dressId: fields[3] as String?,
-      shoesId: fields[4] as String?,
-      createdAt: fields[5] as DateTime,
+      name: fields[1] as String,
+      shirt: fields[2] as String?,
+      pants: fields[3] as String?,
+      dress: fields[4] as String?,
+      shoes: fields[5] as String?,
+      createdAt: fields[6] as DateTime,
     );
   }
 
   @override
-  void write(BinaryWriter writer, ModelClothing obj) {
+  void write(BinaryWriter writer, OutfitModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.shirtId)
+      ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.pantsId)
+      ..write(obj.shirt)
       ..writeByte(3)
-      ..write(obj.dressId)
+      ..write(obj.pants)
       ..writeByte(4)
-      ..write(obj.shoesId)
+      ..write(obj.dress)
       ..writeByte(5)
+      ..write(obj.shoes)
+      ..writeByte(6)
       ..write(obj.createdAt);
   }
 
@@ -50,7 +53,7 @@ class ModelClothingAdapter extends TypeAdapter<ModelClothing> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ModelClothingAdapter &&
+      other is OutfitModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

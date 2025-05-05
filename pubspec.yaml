@@ -50,16 +50,14 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/
     - assets/onboard/
-    - assets/images/aldino.jpg
     - assets/clothes/shirt/
     - assets/clothes/dress/
     - assets/clothes/shoes/
     - assets/clothes/pants/
     - assets/carousel/
     #   - images/a_dot_ham.jpeg
-    - .env
+    # - .env
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
   # For details regarding adding assets from package dependencies, see

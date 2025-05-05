@@ -291,7 +291,7 @@ class _RecentClothingProviderElement
   int get limit => (origin as RecentClothingProvider).limit;
 }
 
-String _$wardrobeNotifierHash() => r'8ca4aee6ee26d282867f7ed55ce0dbfb106bacf3';
+String _$wardrobeNotifierHash() => r'a2e849e1317cc2cb6db604913400ee18b942561d';
 
 /// See also [WardrobeNotifier].
 @ProviderFor(WardrobeNotifier)
