@@ -1,47 +1,49 @@
 import 'package:hive/hive.dart';
 import 'package:modisch/core/database/models/outfit_model_database.dart';
 
-class ModelClothingController {
-  Future<List<ModelClothing>> getAllModels() async {
-    final box = await Hive.openBox<ModelClothing>('models');
+class OutfitModelController {
+  Future<List<OutfitModel>> getAllModels() async {
+    final box = await Hive.openBox<OutfitModel>('models');
     return box.values.toList();
   }
 
-  Future<void> addModel(ModelClothing model) async {
-    final box = await Hive.openBox<ModelClothing>('models');
+  Future<void> addModel(OutfitModel model) async {
+    final box = await Hive.openBox<OutfitModel>('models');
     await box.put(model.id, model);
   }
 
   Future<void> updateModelItem({
     required String id,
-    String? newShirtId,
-    String? newPantsId,
-    String? newDressId,
-    String? newShoesId,
+    String? newShirt,
+    String? newPants,
+    String? newDress,
+    String? newShoes,
   }) async {
-    final box = await Hive.openBox<ModelClothing>('models');
+    final box = await Hive.openBox<OutfitModel>('models');
     final existing = box.get(id);
 
     if (existing != null) {
-      final updated = ModelClothing(
+      final updated = OutfitModel(
         id: existing.id,
-        shirtId: newShirtId ?? existing.shirtId,
-        pantsId: newPantsId ?? existing.pantsId,
-        dressId: newDressId ?? existing.dressId,
-        shoesId: newShoesId ?? existing.shoesId,
+        name: existing.name,
+        shirt: newShirt ?? existing.shirt,
+        pants: newPants ?? existing.pants,
+        dress: newDress ?? existing.dress,
+        shoes: newShoes ?? existing.shoes,
         createdAt: existing.createdAt,
       );
       await box.put(id, updated);
     }
   }
 
+
   Future<void> deleteModel(String id) async {
-    final box = await Hive.openBox<ModelClothing>('models');
+    final box = await Hive.openBox<OutfitModel>('models');
     await box.delete(id);
   }
 
-  Future<ModelClothing?> getModelById(String id) async {
-    final box = await Hive.openBox<ModelClothing>('models');
+  Future<OutfitModel?> getModelById(String id) async {
+    final box = await Hive.openBox<OutfitModel>('models');
     return box.get(id);
   }
 }

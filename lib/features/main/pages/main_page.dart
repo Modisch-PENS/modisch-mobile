@@ -12,20 +12,28 @@ import 'package:modisch/features/wardrobe/widgets/wardrobe_expandable_fab.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
 class MainPage extends ConsumerStatefulWidget {
-  const MainPage({super.key});
+  final int initialTab;
+  const MainPage({super.key, this.initialTab = 0}); // default to Home
 
   @override
   ConsumerState<MainPage> createState() => _MainPageState();
 }
 
+
 class _MainPageState extends ConsumerState<MainPage> {
-  final PageController pageController = PageController();
+  late final PageController pageController = PageController(initialPage: widget.initialTab);
+
 
   @override
-  void dispose() {
-    pageController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(mainPageNotifierProvider.notifier)
+          .changePageToIndex(widget.initialTab);
+    });
   }
+
+
 
   final Map<MainPageTab, Widget> _fabMap = {
     MainPageTab.home: const CustomExpandableFab(),

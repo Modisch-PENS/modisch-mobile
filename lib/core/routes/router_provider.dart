@@ -33,10 +33,14 @@ GoRouter router(RouterRef ref) {
         builder: (context, state) => const OnboardPage(),
       ),
       GoRoute(
-        path: '/main',
         name: 'main',
-        builder: (context, state) => const MainPage(),
+        path: '/main',
+        builder: (context, state) {
+          final tabIndex = int.tryParse(state.uri.queryParameters['tab'] ?? '0') ?? 0;
+          return MainPage(initialTab: tabIndex);
+        },
       ),
+
       // Camera picker routes
       GoRoute(
         path: '/camera_picker',

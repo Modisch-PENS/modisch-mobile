@@ -190,7 +190,30 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
                 );
                 return;
               }
-              _saveOutfitAndNavigate(ctx, name);
+              final outfitNotifier = ref.read(outfitNotifierProvider.notifier);
+              
+              if (_isEditing && widget.outfitId != null) {
+                // Update existing outfit
+                final outfit = editorState.copyWith(
+                  id: widget.outfitId!,
+                  name: name,
+                );
+                await outfitNotifier.updateOutfit(outfit);
+              } else {
+                // Add new outfit
+                await outfitNotifier.addOutfit(
+                  name: name,
+                  shirt: editorState.shirt,
+                  pants: editorState.pants,
+                  dress: editorState.dress,
+                  shoes: editorState.shoes,
+                );
+              }
+              
+              if (mounted) {
+                Navigator.pop(ctx);
+                context.goNamed('main', queryParameters: {'tab': '2'});
+              }
             },
             child: const Text(
               'Save',

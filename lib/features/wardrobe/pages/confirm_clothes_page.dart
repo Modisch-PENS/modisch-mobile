@@ -97,7 +97,7 @@ class _ConfirmClothesPageState extends ConsumerState<ConfirmClothesPage> {
 
       // Navigate back to main page using GoRouter
       if (mounted) {
-        context.goNamed('main');
+        context.goNamed('main', queryParameters: {'tab': '1'});
       }
     } catch (e) {
       // Show error snackbar
