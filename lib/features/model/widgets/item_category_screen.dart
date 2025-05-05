@@ -152,7 +152,7 @@ class ItemCategoryScreen extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+            child: const Text('OK', style: TextStyle(color: AppColors.secondary),),
           ),
         ],
       ),

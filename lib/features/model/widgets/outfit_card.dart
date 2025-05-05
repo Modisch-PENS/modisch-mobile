@@ -9,7 +9,7 @@ import 'package:modisch/features/model/providers/outfit_provider.dart';
 class OutfitCard extends ConsumerStatefulWidget {
   final OutfitModel outfit;
   final VoidCallback onEdit;
-  
+
   const OutfitCard({
     super.key,
     required this.outfit,
@@ -43,14 +43,14 @@ class _OutfitCardState extends ConsumerState<OutfitCard> {
 
   void _onLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
     final RenderBox? box = _cardKey.currentContext?.findRenderObject() as RenderBox?;
-    
+
     if (box != null) {
       final Offset localPosition = box.globalToLocal(details.globalPosition);
       final Size boxSize = box.size;
-      
+
       // Check if hovering over delete button area (top right corner)
       final bool isHovering = localPosition.dx > boxSize.width - 50 && localPosition.dy < 50;
-      
+
       if (isHovering != _isHoveringOnDelete) {
         setState(() {
           _isHoveringOnDelete = isHovering;
@@ -71,7 +71,7 @@ class _OutfitCardState extends ConsumerState<OutfitCard> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text("Cancel"),
+              child: const Text("Cancel",style: TextStyle(color: AppColors.searchBarComponents),),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
@@ -85,23 +85,21 @@ class _OutfitCardState extends ConsumerState<OutfitCard> {
       },
     ) ?? false;
 
+    final outfitToRestore = widget.outfit;
+
     if (confirmDelete) {
       final outfitId = widget.outfit.id;
-      
-      // Delete from Hive
       await ref.read(outfitNotifierProvider.notifier).deleteOutfit(outfitId);
-      
-      // Show snackbar with undo option
+
       if (mounted) {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${widget.outfit.name} deleted'),
+            content: Text('${outfitToRestore.name} deleted'),
             action: SnackBarAction(
               label: 'Undo',
               onPressed: () {
-                // Add back the deleted outfit
-                ref.read(outfitNotifierProvider.notifier).updateOutfit(widget.outfit);
+                ref.read(outfitNotifierProvider.notifier).updateOutfit(outfitToRestore);
               },
             ),
           ),
@@ -114,7 +112,7 @@ class _OutfitCardState extends ConsumerState<OutfitCard> {
   Widget build(BuildContext context) {
     // Helper function to check if an item exists
     bool isValid(String? img) => img != null && img.isNotEmpty;
-    
+
     return GestureDetector(
       key: _cardKey,
       onLongPressStart: _onLongPressStart,
@@ -171,7 +169,7 @@ class _OutfitCardState extends ConsumerState<OutfitCard> {
               ],
             ),
           ),
-          
+
           // Delete button that appears on long press
           if (_isLongPressed)
             Positioned(
@@ -181,8 +179,8 @@ class _OutfitCardState extends ConsumerState<OutfitCard> {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: _isHoveringOnDelete 
-                      ? Colors.red 
+                  color: _isHoveringOnDelete
+                      ? Colors.red
                       : AppColors.primary.withOpacity(0.9),
                   shape: BoxShape.circle,
                   boxShadow: [
@@ -195,14 +193,14 @@ class _OutfitCardState extends ConsumerState<OutfitCard> {
                 ),
                 child: Icon(
                   Icons.delete,
-                  color: _isHoveringOnDelete 
-                      ? Colors.white 
+                  color: _isHoveringOnDelete
+                      ? Colors.white
                       : AppColors.secondary,
                   size: 20,
                 ),
               ),
             ),
-          
+
           // Overlay for dragging state
           if (_isLongPressed)
             Positioned.fill(
@@ -217,7 +215,7 @@ class _OutfitCardState extends ConsumerState<OutfitCard> {
       ),
     );
   }
-  
+
   // Helper method to build an image widget based on the path
   Widget _buildItemImage(String path, double height) {
     // Use direct path for images (don't add 'assets/images/' prefix)

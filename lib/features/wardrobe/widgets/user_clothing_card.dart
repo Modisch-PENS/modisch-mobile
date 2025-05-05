@@ -5,6 +5,7 @@ import 'package:modisch/core/constants/colors.dart';
 import 'package:modisch/core/constants/typography.dart';
 import 'package:modisch/core/database/models/wardrobe_database.dart';
 import 'package:modisch/features/wardrobe/riverpod/wardrobe_provider.dart';
+import 'package:path_provider/path_provider.dart';
 
 class UserClothingCard extends ConsumerStatefulWidget {
   final ClothingModel clothing;
@@ -107,27 +108,76 @@ class _UserClothingCardState extends ConsumerState<UserClothingCard> {
       },
     ) ?? false;
 
+    // Store the clothing model and make a backup of the file before deletion
+    final clothingToRestore = widget.clothing;
+    final originalFilePath = clothingToRestore.imagePath;
+    File? tempBackupFile;
+
+    // Create temporary backup of image file before deletion
+    try {
+      final originalFile = File(originalFilePath);
+      if (await originalFile.exists()) {
+        // Create a temporary file with the same extension
+        final tempPath = '${(await getTemporaryDirectory()).path}/${clothingToRestore.id}_backup.jpg';
+        tempBackupFile = await originalFile.copy(tempPath);
+        debugPrint('Image backed up to: $tempPath');
+      }
+    } catch (e) {
+      debugPrint('Error backing up image: $e');
+    }
+
     if (confirmDelete) {
-      ref.read(wardrobeNotifierProvider.notifier).deleteClothingItem(widget.clothing.id);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${widget.clothing.name} deleted'),
-          action: SnackBarAction(
-            label: 'Undo',
-            onPressed: () {
-              ref.read(wardrobeNotifierProvider.notifier).addClothingItem(
-                id: widget.clothing.id,
-                category: widget.clothing.category,
-                imagePath: widget.clothing.imagePath,
-                name: widget.clothing.name,
-              );
-            },
+      // Get the notifier reference BEFORE the widget might be disposed
+      final notifier = ref.read(wardrobeNotifierProvider.notifier);
+
+      // Delete the item
+      await notifier.deleteClothingItem(clothingToRestore.id);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${clothingToRestore.name} deleted'),
+            action: SnackBarAction(
+              label: 'Undo',
+              onPressed: () {
+                // Use the cached notifier instead of ref
+                () async {
+                  try {
+                    // If we have a backup file, restore it first
+                    if (tempBackupFile != null && await tempBackupFile.exists()) {
+                final destinationFile = File(originalFilePath);
+                // Ensure parent directory exists
+                await destinationFile.parent.create(recursive: true);
+                // Copy the backup back to the original location
+                await tempBackupFile.copy(originalFilePath);
+                debugPrint('Image restored to: $originalFilePath');
+                }
+
+                // Now restore the database entry
+                await notifier.addClothingItem(
+                id: clothingToRestore.id,
+                category: clothingToRestore.category,
+                imagePath: clothingToRestore.imagePath,
+                name: clothingToRestore.name,
+                );
+                debugPrint('Item restored: ${clothingToRestore.name}');
+                } catch (e) {
+                debugPrint('Error restoring item: $e');
+                } finally {
+                // Clean up the temporary file
+                if (tempBackupFile != null && await tempBackupFile.exists()) {
+                await tempBackupFile.delete();
+                }
+                }
+              }();
+              },
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
-
   void _startNameEditing() {
     setState(() {
       _isEditing = true;

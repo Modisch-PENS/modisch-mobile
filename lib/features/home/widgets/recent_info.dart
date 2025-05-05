@@ -100,6 +100,20 @@ class RecentInfo extends ConsumerWidget {
             title,
             style: AppTypography.recentInfoLabel(context),
           ),
+          // TextButton(
+          //   onPressed: () {
+          //     // Navigate directly to the appropriate tab path
+          //     final String tabPath = title.toLowerCase().contains('outfit') ? '/model' : '/wardrobe';
+          //     context.go(tabPath);
+          //   },
+          //   style: TextButton.styleFrom(
+          //     foregroundColor: AppColors.tertiary,
+          //     padding: const EdgeInsets.symmetric(horizontal: 8),
+          //     minimumSize: Size.zero,
+          //     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          //   ),
+          //   child: const Text('See All'),
+          // ),
         ],
       ),
     );
