@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../model/selected_model.dart';
-import '../widgets/item_card.dart';
+import 'item_card.dart';
 
 class PreviewSelectScreen extends StatelessWidget {
   final String category;

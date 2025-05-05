@@ -170,7 +170,7 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
               
               if (mounted) {
                 Navigator.pop(ctx);
-                context.pop();
+                context.goNamed('main', queryParameters: {'tab': '2'});
               }
             },
             child: const Text('Save', style: TextStyle(color: AppColors.tertiary),),
