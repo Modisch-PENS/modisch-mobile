@@ -37,6 +37,7 @@ dependencies:
   shared_preferences: ^2.2.0
   stylish_bottom_bar: ^1.0.3
   uuid: ^4.5.1
+  flutter_keyboard_visibility: ^6.0.0
 
 dev_dependencies:
 

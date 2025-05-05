@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modisch/core/constants/colors.dart';
-import 'package:modisch/core/database/models/wardrobe_database.dart';
 import 'package:modisch/features/model/providers/outfit_provider.dart';
 import 'package:modisch/features/model/widgets/item_card.dart';
 import 'package:modisch/features/wardrobe/riverpod/dummy_assets_provider.dart';
@@ -11,9 +10,9 @@ class ItemCategoryScreen extends ConsumerWidget {
   final String category;
   
   const ItemCategoryScreen({
-    Key? key,
+    super.key,
     required this.category,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -127,7 +126,7 @@ class ItemCategoryScreen extends ConsumerWidget {
                 Icon(
                   _getCategoryIcon(category),
                   size: 64,
-                  color: AppColors.disabled.withOpacity(0.5),
+                  color: AppColors.disabled.withValues(alpha: 0.5),
                 ),
                 const SizedBox(height: 16),
                 Text(

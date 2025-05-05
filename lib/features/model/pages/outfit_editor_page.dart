@@ -24,6 +24,11 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
   late PageController _pageController;
   final List<String> _categories = ['Shirt', 'Pants', 'Dress', 'Shoes'];
   bool _isEditing = false;
+  bool _isEditingTitle = false;
+  final TextEditingController _titleController = TextEditingController(
+    text: "New Outfit",
+  );
+  final FocusNode _titleFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -47,6 +52,10 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
       // Load into editor
       if (outfit.id.isNotEmpty) {
         ref.read(outfitEditorNotifierProvider.notifier).loadOutfit(outfit);
+        // Set the title controller with the outfit name
+        setState(() {
+          _titleController.text = outfit.name;
+        });
       }
     } else {
       // Creating new outfit
@@ -57,6 +66,8 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
   @override
   void dispose() {
     _pageController.dispose();
+    _titleController.dispose();
+    _titleFocusNode.dispose();
     super.dispose();
   }
 
@@ -73,77 +84,55 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
 
   void _navigateToModelTab() {
     // Set the MainPageNotifier to show the model tab
-    ref.read(mainPageNotifierProvider.notifier).changePageToTab(MainPageTab.model);
+    ref
+        .read(mainPageNotifierProvider.notifier)
+        .changePageToTab(MainPageTab.model);
     // Navigate to main page, replacing the current screen
-    context.goNamed('main');
+    context.goNamed('main', queryParameters: {'tab': '2'});
   }
 
   void _discardChanges() {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Discard Changes'),
-        content: const Text('Do you want to discard unsaved changes?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+      builder:
+          (ctx) => AlertDialog(
+            title: const Text('Discard Changes'),
+            content: const Text('Do you want to discard unsaved changes?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  _navigateToModelTab();
+                },
+                child: const Text(
+                  'Discard',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              _navigateToModelTab();
-            },
-            child: const Text(
-              'Discard',
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
-  void _saveOutfitAndNavigate(BuildContext dialogContext, String name) async {
+  Future<void> _saveOutfit() async {
     final editorState = ref.read(outfitEditorNotifierProvider);
-    final outfitNotifier = ref.read(outfitNotifierProvider.notifier);
+    final outfitName = _titleController.text.trim();
 
-    if (_isEditing && widget.outfitId != null) {
-      // Update existing outfit
-      final outfit = editorState.copyWith(
-        id: widget.outfitId!,
-        name: name,
+    // Check if outfit has a name
+    if (outfitName.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter an outfit name'),
+          backgroundColor: Colors.red,
+        ),
       );
-      await outfitNotifier.updateOutfit(outfit);
-    } else {
-      // Add new outfit
-      await outfitNotifier.addOutfit(
-        name: name,
-        shirt: editorState.shirt,
-        pants: editorState.pants,
-        dress: editorState.dress,
-        shoes: editorState.shoes,
-      );
+      _startTitleEditing();
+      return;
     }
-
-    // First close the dialog
-    if (mounted) {
-      Navigator.pop(dialogContext);
-      
-      // Then set the tab and navigate
-      ref.read(mainPageNotifierProvider.notifier).changePageToTab(MainPageTab.model);
-      
-      // Short delay to ensure dialog is fully closed
-      Future.microtask(() {
-        if (mounted) {
-          context.goNamed('main');
-        }
-      });
-    }
-  }
-
-  void _saveOutfit() {
-    final editorState = ref.read(outfitEditorNotifierProvider);
 
     // Check if outfit has any items
     if (!ref.read(outfitEditorNotifierProvider.notifier).isReadyToSave) {
@@ -156,148 +145,192 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
       return;
     }
 
-    // Show name input dialog
-    final controller = TextEditingController(
-      text: _isEditing ? editorState.name : '',
-    );
+    final outfitNotifier = ref.read(outfitNotifierProvider.notifier);
 
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(_isEditing ? 'Update Outfit' : 'Save Outfit'),
-        content: TextField(
-          controller: controller,
-          decoration: const InputDecoration(
-            hintText: "Enter outfit name",
-            border: OutlineInputBorder(),
+    try {
+      if (_isEditing && widget.outfitId != null) {
+        // Update existing outfit
+        final outfit = editorState.copyWith(
+          id: widget.outfitId!,
+          name: outfitName,
+        );
+        await outfitNotifier.updateOutfit(outfit);
+      } else {
+        // Add new outfit
+        await outfitNotifier.addOutfit(
+          name: outfitName,
+          shirt: editorState.shirt,
+          pants: editorState.pants,
+          dress: editorState.dress,
+          shoes: editorState.shoes,
+        );
+      }
+
+      if (mounted) {
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${_isEditing ? 'Updated' : 'Saved'}: $outfitName'),
+            backgroundColor: Colors.green,
           ),
-          autofocus: true,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+        );
+
+        // Navigate back to model tab
+        _navigateToModelTab();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error saving outfit: ${e.toString()}'),
+            backgroundColor: Colors.red,
           ),
-          TextButton(
-            onPressed: () async {
-              final name = controller.text.trim();
-              if (name.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Please enter outfit name'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-                return;
-              }
-              final outfitNotifier = ref.read(outfitNotifierProvider.notifier);
-              
-              if (_isEditing && widget.outfitId != null) {
-                // Update existing outfit
-                final outfit = editorState.copyWith(
-                  id: widget.outfitId!,
-                  name: name,
-                );
-                await outfitNotifier.updateOutfit(outfit);
-              } else {
-                // Add new outfit
-                await outfitNotifier.addOutfit(
-                  name: name,
-                  shirt: editorState.shirt,
-                  pants: editorState.pants,
-                  dress: editorState.dress,
-                  shoes: editorState.shoes,
-                );
-              }
-              
-              if (mounted) {
-                Navigator.pop(ctx);
-                context.goNamed('main', queryParameters: {'tab': '2'});
-              }
-            },
-            child: const Text(
-              'Save',
-              style: TextStyle(color: AppColors.tertiary),
-            ),
-          ),
-        ],
-      ),
-    );
+        );
+      }
+    }
+  }
+
+  void _startTitleEditing() {
+    setState(() {
+      _isEditingTitle = true;
+    });
+
+    // Focus on the text field after state update
+    Future.delayed(const Duration(milliseconds: 50), () {
+      if (mounted) {
+        _titleFocusNode.requestFocus();
+      }
+    });
+  }
+
+  void _finishTitleEditing() {
+    setState(() {
+      _isEditingTitle = false;
+    });
+    _titleFocusNode.unfocus();
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      // Handle back button press
-      onWillPop: () async {
-        _discardChanges();
-        return false; // Prevent default back navigation
+    return GestureDetector(
+      // Tap outside to finish editing title and dismiss keyboard
+      onTap: () {
+        if (_isEditingTitle) {
+          _finishTitleEditing();
+        }
+        FocusScope.of(context).unfocus();
       },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
+      child: WillPopScope(
+        // Handle back button press
+        onWillPop: () async {
+          _discardChanges();
+          return false; // Prevent default back navigation
+        },
+        child: Scaffold(
+          // Use resizeToAvoidBottomInset to handle keyboard properly
+          resizeToAvoidBottomInset: true,
           backgroundColor: Colors.white,
-          elevation: 0,
-          centerTitle: true,
-          title: Text(
-            _isEditing ? 'Edit Outfit' : 'Create Outfit',
-            style: AppTypography.pageTitle(context),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.secondary),
-            onPressed: _discardChanges,
-          ),
-        ),
-        body: Column(
-          children: [
-            const SizedBox(height: 10),
-            const OutfitPreview(),
-            const SizedBox(height: 16),
-            // Save Button
-            SizedBox(
-              width: 268,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.tertiary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            centerTitle: true,
+            title: GestureDetector(
+              onDoubleTap: _startTitleEditing,
+              child:
+                  _isEditingTitle
+                      ? SizedBox(
+                        height: 40,
+                        width: 200,
+                        child: TextField(
+                          controller: _titleController,
+                          focusNode: _titleFocusNode,
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColors.secondary,
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                          style: AppTypography.inputTextPlaceholder(context),
+                          textAlign: TextAlign.center,
+                          onSubmitted: (_) => _finishTitleEditing(),
+                        ),
+                      )
+                      : Text(
+                        _titleController.text,
+                        style: AppTypography.pageTitle(context),
+                      ),
+            ),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: AppColors.secondary),
+              onPressed: _discardChanges,
+            ),
+            actions: [
+              if (!_isEditingTitle)
+                IconButton(
+                  icon: const Icon(Icons.edit, color: AppColors.secondary),
+                  onPressed: _startTitleEditing,
                 ),
-                onPressed: _saveOutfit,
-                child: const Text(
-                  "Save",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+            ],
+          ),
+          body: Column(
+            children: [
+              const SizedBox(height: 10),
+              const OutfitPreview(),
+              const SizedBox(height: 16),
+              // Save Button
+              SizedBox(
+                width: 268,
+                height: 48,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.tertiary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                  ),
+                  onPressed: _saveOutfit,
+                  child: const Text(
+                    "Save",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 12),
-            // Tab Bar
-            TopTabBar(
-              currentIndex: _currentTabIndex,
-              onTabSelected: _onTabSelected,
-              tabs: _categories,
-            ),
-            const SizedBox(height: 10),
-            // PageView for categories
-            Expanded(
-              child: PageView(
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentTabIndex = index;
-                  });
-                },
-                children: _categories.map((category) {
-                  return ItemCategoryScreen(category: category);
-                }).toList(),
+              const SizedBox(height: 12),
+              // Tab Bar
+              TopTabBar(
+                currentIndex: _currentTabIndex,
+                onTabSelected: _onTabSelected,
+                tabs: _categories,
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              // PageView for categories
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentTabIndex = index;
+                    });
+                  },
+                  children:
+                      _categories.map((category) {
+                        return ItemCategoryScreen(category: category);
+                      }).toList(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
