@@ -45,7 +45,7 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
       // Use outfit notifier to get outfit by ID
       final outfitsState = await ref.read(outfitNotifierProvider.future);
       final outfit = outfitsState.firstWhere(
-        (o) => o.id == widget.outfitId,
+            (o) => o.id == widget.outfitId,
         orElse: () => OutfitModel.empty(),
       );
 
@@ -96,25 +96,25 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
       context: context,
       builder:
           (ctx) => AlertDialog(
-            title: const Text('Discard Changes'),
-            content: const Text('Do you want to discard unsaved changes?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(ctx);
-                  _navigateToModelTab();
-                },
-                child: const Text(
-                  'Discard',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-            ],
+        title: const Text('Discard Changes'),
+        content: const Text('Do you want to discard unsaved changes?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
           ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              _navigateToModelTab();
+            },
+            child: const Text(
+              'Discard',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -237,35 +237,35 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
             title: GestureDetector(
               onDoubleTap: _startTitleEditing,
               child:
-                  _isEditingTitle
-                      ? SizedBox(
-                        height: 40,
-                        width: 200,
-                        child: TextField(
-                          controller: _titleController,
-                          focusNode: _titleFocusNode,
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            border: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: AppColors.secondary,
-                                width: 2,
-                              ),
-                            ),
-                          ),
-                          style: AppTypography.inputTextPlaceholder(context),
-                          textAlign: TextAlign.center,
-                          onSubmitted: (_) => _finishTitleEditing(),
-                        ),
-                      )
-                      : Text(
-                        _titleController.text,
-                        style: AppTypography.pageTitle(context),
+              _isEditingTitle
+                  ? SizedBox(
+                height: 40,
+                width: 200,
+                child: TextField(
+                  controller: _titleController,
+                  focusNode: _titleFocusNode,
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColors.secondary,
+                        width: 2,
                       ),
+                    ),
+                  ),
+                  style: AppTypography.inputTextPlaceholder(context),
+                  textAlign: TextAlign.center,
+                  onSubmitted: (_) => _finishTitleEditing(),
+                ),
+              )
+                  : Text(
+                _titleController.text,
+                style: AppTypography.pageTitle(context),
+              ),
             ),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: AppColors.secondary),
@@ -279,57 +279,58 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
                 ),
             ],
           ),
-          body: Column(
-            children: [
-              const SizedBox(height: 10),
-              const OutfitPreview(),
-              const SizedBox(height: 16),
-              // Save Button
-              SizedBox(
-                width: 268,
-                height: 48,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.tertiary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 10),
+                const OutfitPreview(),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: 268,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.tertiary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
                     ),
-                  ),
-                  onPressed: _saveOutfit,
-                  child: const Text(
-                    "Save",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                    onPressed: _saveOutfit,
+                    child: const Text(
+                      "Save",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              // Tab Bar
-              TopTabBar(
-                currentIndex: _currentTabIndex,
-                onTabSelected: _onTabSelected,
-                tabs: _categories,
-              ),
-              const SizedBox(height: 10),
-              // PageView for categories
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _currentTabIndex = index;
-                    });
-                  },
-                  children:
-                      _categories.map((category) {
-                        return ItemCategoryScreen(category: category);
-                      }).toList(),
+                const SizedBox(height: 12),
+                TopTabBar(
+                  currentIndex: _currentTabIndex,
+                  onTabSelected: _onTabSelected,
+                  tabs: _categories,
                 ),
-              ),
-            ],
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height *0.5,
+                  child: PageView(
+                    controller: _pageController,
+                    onPageChanged: (index){
+                      setState(() {
+                        _currentTabIndex = index;
+                      });
+                    },
+                    children: _categories
+                        .map((category) => ItemCategoryScreen(category: category))
+                        .toList(),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
