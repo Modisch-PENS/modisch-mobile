@@ -61,7 +61,7 @@ class CustomExpandableFab extends StatelessWidget {
               borderRadius: BorderRadius.circular(50),
             ),
             onPressed:
-                () => context.goNamed('main', extra: {'openModel': true}),
+                () => context.goNamed('outfit_editor_new'),
             icon: const FaIcon(
               FontAwesomeIcons.shirt,
               size: 16,
