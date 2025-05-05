@@ -227,46 +227,19 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
           return false; // Prevent default back navigation
         },
         child: Scaffold(
-          // Use resizeToAvoidBottomInset to handle keyboard properly
-          resizeToAvoidBottomInset: true,
-          backgroundColor: Colors.white,
+          // Important: Set this to false to handle keyboard ourselves
+          resizeToAvoidBottomInset: false,
+          backgroundColor:AppColors.background,
           appBar: AppBar(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.primary,
             elevation: 0,
             centerTitle: true,
-            title: GestureDetector(
-              onDoubleTap: _startTitleEditing,
-              child:
-                  _isEditingTitle
-                      ? SizedBox(
-                        height: 40,
-                        width: 200,
-                        child: TextField(
-                          controller: _titleController,
-                          focusNode: _titleFocusNode,
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            border: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: AppColors.secondary,
-                                width: 2,
-                              ),
-                            ),
-                          ),
-                          style: AppTypography.inputTextPlaceholder(context),
-                          textAlign: TextAlign.center,
-                          onSubmitted: (_) => _finishTitleEditing(),
-                        ),
-                      )
-                      : Text(
-                        _titleController.text,
-                        style: AppTypography.pageTitle(context),
-                      ),
-            ),
+            title: _isEditingTitle
+                ? _buildTitleEditField()
+                : Text(
+                    _titleController.text,
+                    style: AppTypography.pageTitle(context),
+                  ),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: AppColors.secondary),
               onPressed: _discardChanges,
@@ -279,58 +252,111 @@ class _OutfitEditorPageState extends ConsumerState<OutfitEditorPage> {
                 ),
             ],
           ),
-          body: Column(
+          body: Stack(
             children: [
-              const SizedBox(height: 10),
-              const OutfitPreview(),
-              const SizedBox(height: 16),
-              // Save Button
-              SizedBox(
-                width: 268,
-                height: 48,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.tertiary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+              Column(
+                children: [
+                  const SizedBox(height: 10),
+                  const OutfitPreview(),
+                  const SizedBox(height: 16),
+                  // Save Button
+                  SizedBox(
+                    width: 268,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.tertiary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
+                      onPressed: _saveOutfit,
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
                   ),
-                  onPressed: _saveOutfit,
-                  child: const Text(
-                    "Save",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                  const SizedBox(height: 12),
+                  // Tab Bar
+                  TopTabBar(
+                    currentIndex: _currentTabIndex,
+                    onTabSelected: _onTabSelected,
+                    tabs: _categories,
+                  ),
+                  const SizedBox(height: 10),
+                  // PageView for categories
+                  Expanded(
+                    child: PageView(
+                      controller: _pageController,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentTabIndex = index;
+                        });
+                      },
+                      children:
+                          _categories.map((category) {
+                            return ItemCategoryScreen(category: category);
+                          }).toList(),
                     ),
                   ),
-                ),
+                ],
               ),
-              const SizedBox(height: 12),
-              // Tab Bar
-              TopTabBar(
-                currentIndex: _currentTabIndex,
-                onTabSelected: _onTabSelected,
-                tabs: _categories,
-              ),
-              const SizedBox(height: 10),
-              // PageView for categories
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _currentTabIndex = index;
-                    });
-                  },
-                  children:
-                      _categories.map((category) {
-                        return ItemCategoryScreen(category: category);
-                      }).toList(),
-                ),
-              ),
+              // Overlay for title editing when keyboard is shown
+              if (_isEditingTitle)
+                _buildTitleEditOverlay(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTitleEditField() {
+    return SizedBox(
+      height: 40,
+      width: 200,
+      child: TextField(
+        controller: _titleController,
+        focusNode: _titleFocusNode,
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 8,
+            vertical: 4,
+          ),
+          border: OutlineInputBorder(),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AppColors.secondary,
+              width: 2,
+            ),
+          ),
+        ),
+        style: AppTypography.inputTextPlaceholder(context),
+        textAlign: TextAlign.center,
+        onSubmitted: (_) => _finishTitleEditing(),
+        // Add text editing complete callback for keyboard done button
+        textInputAction: TextInputAction.done,
+        onEditingComplete: _finishTitleEditing,
+      ),
+    );
+  }
+
+  Widget _buildTitleEditOverlay() {
+    // This overlay appears when editing the title with keyboard open
+    return Positioned(
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: MediaQuery.of(context).viewInsets.bottom,
+      child: IgnorePointer(
+        // This makes the overlay non-interactive, allowing clicks to pass through
+        child: Container(
+          color: Colors.black.withOpacity(0.1),
         ),
       ),
     );
