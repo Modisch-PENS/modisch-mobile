@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:modisch/core/database/models/wardrobe_database.dart';
+import 'package:Modisch/core/database/models/wardrobe_database.dart';
 
 class WardrobeService {
   final Box _wardrobeBox = Hive.box('wardrobe');

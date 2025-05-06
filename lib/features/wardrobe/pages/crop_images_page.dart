@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:modisch/core/constants/colors.dart';
+import 'package:Modisch/core/constants/colors.dart';
 
 class CropImagePage extends StatefulWidget {
   final ImageSource source;

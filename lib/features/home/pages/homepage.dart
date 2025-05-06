@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modisch/core/constants/spacing.dart';
-import 'package:modisch/features/home/widgets/carousel_slides.dart';
-import 'package:modisch/features/home/widgets/homepage_header.dart';
-import 'package:modisch/features/home/widgets/recent_info.dart';
-import 'package:modisch/features/home/widgets/search_bar.dart';
+import 'package:Modisch/core/constants/spacing.dart';
+import 'package:Modisch/features/home/widgets/carousel_slides.dart';
+import 'package:Modisch/features/home/widgets/homepage_header.dart';
+import 'package:Modisch/features/home/widgets/recent_info.dart';
+import 'package:Modisch/features/home/widgets/search_bar.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});

@@ -1,5 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:modisch/core/database/models/outfit_model_database.dart';
+import 'package:Modisch/core/database/models/outfit_model_database.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 

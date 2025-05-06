@@ -1,4 +1,4 @@
-package com.example.modisch
+package com.pens.modisch
 
 import io.flutter.embedding.android.FlutterActivity
 

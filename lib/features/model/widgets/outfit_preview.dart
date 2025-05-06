@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modisch/features/model/providers/outfit_provider.dart';
+import 'package:Modisch/features/model/providers/outfit_provider.dart';
 
 class OutfitPreview extends ConsumerWidget {
   const OutfitPreview({Key? key}) : super(key: key);

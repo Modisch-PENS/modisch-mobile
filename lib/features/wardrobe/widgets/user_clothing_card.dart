@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modisch/core/constants/colors.dart';
-import 'package:modisch/core/constants/typography.dart';
-import 'package:modisch/core/database/models/wardrobe_database.dart';
-import 'package:modisch/features/wardrobe/riverpod/wardrobe_provider.dart';
+import 'package:Modisch/core/constants/colors.dart';
+import 'package:Modisch/core/constants/typography.dart';
+import 'package:Modisch/core/database/models/wardrobe_database.dart';
+import 'package:Modisch/features/wardrobe/riverpod/wardrobe_provider.dart';
 import 'package:path_provider/path_provider.dart';
 
 class UserClothingCard extends ConsumerStatefulWidget {
@@ -253,7 +253,7 @@ class _UserClothingCardState extends ConsumerState<UserClothingCard> {
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
-                          color: AppColors.disabled.withOpacity(0.2),
+                          color: AppColors.disabled.withValues(alpha :0.2),
                           child: const Center(
                             child: Icon(
                               Icons.broken_image,
@@ -327,11 +327,11 @@ class _UserClothingCardState extends ConsumerState<UserClothingCard> {
                   decoration: BoxDecoration(
                     color: _isHoveringOnDelete 
                         ? Colors.red 
-                        : AppColors.primary.withOpacity(0.9),
+                        : AppColors.primary.withValues(alpha :0.9),
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha :0.2),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),
@@ -352,7 +352,7 @@ class _UserClothingCardState extends ConsumerState<UserClothingCard> {
               Positioned.fill(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha :0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),

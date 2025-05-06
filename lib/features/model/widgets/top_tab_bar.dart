@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:modisch/core/constants/colors.dart';
+import 'package:Modisch/core/constants/colors.dart';
 
 class TopTabBar extends StatelessWidget {
   final int currentIndex;
@@ -21,7 +21,7 @@ class TopTabBar extends StatelessWidget {
         color: AppColors.background,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha :0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),

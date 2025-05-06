@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:modisch/core/constants/colors.dart';
-import 'package:modisch/core/constants/typography.dart';
-import 'package:modisch/core/database/models/wardrobe_database.dart';
+import 'package:Modisch/core/constants/colors.dart';
+import 'package:Modisch/core/constants/typography.dart';
+import 'package:Modisch/core/database/models/wardrobe_database.dart';
 
 class ClothingGridItem extends StatelessWidget {
   final ClothingModel item;

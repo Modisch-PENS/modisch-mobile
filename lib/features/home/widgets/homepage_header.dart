@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:modisch/core/constants/colors.dart';
-import 'package:modisch/core/constants/typography.dart';
+import 'package:Modisch/core/constants/colors.dart';
+import 'package:Modisch/core/constants/typography.dart';
 
 class HomepageHeader extends StatelessWidget {
   const HomepageHeader({super.key});

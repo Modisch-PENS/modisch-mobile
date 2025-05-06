@@ -1,5 +1,5 @@
-import 'package:modisch/core/database/models/wardrobe_database.dart';
-import 'package:modisch/features/wardrobe/riverpod/dummy_assets_provider.dart';
+import 'package:Modisch/core/database/models/wardrobe_database.dart';
+import 'package:Modisch/features/wardrobe/riverpod/dummy_assets_provider.dart';
 
 /// A wrapper class that can represent either a real user item or a dummy asset
 class WardrobeItem {

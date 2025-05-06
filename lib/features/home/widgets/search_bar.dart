@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:modisch/core/constants/colors.dart';
+import 'package:Modisch/core/constants/colors.dart';
 
 class SearchBarComponent extends StatelessWidget {
   const SearchBarComponent({super.key});
@@ -11,7 +11,7 @@ class SearchBarComponent extends StatelessWidget {
       child: SearchBar(
         leading: Icon(
           Icons.menu,
-          // color: AppColors.secondary.withOpacity(0.4),
+          // color: AppColors.secondary.withValues(alpha :0.4),
           color: AppColors.searchBarComponents,
         ),
         hintText: 'Himit Outfit',

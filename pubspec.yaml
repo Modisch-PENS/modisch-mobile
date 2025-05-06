@@ -1,6 +1,6 @@
-name: modisch
+name: Modisch
 
-description: "A new Flutter project."
+description: "Modisch: Where Style Meets Simplicity"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
@@ -37,16 +37,23 @@ dependencies:
   shared_preferences: ^2.2.0
   stylish_bottom_bar: ^1.0.3
   uuid: ^4.5.1
-  flutter_keyboard_visibility: ^6.0.0
 
 dev_dependencies:
-
   build_runner: ^2.2.0
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
   riverpod_generator: ^2.6.1
   riverpod_lint: ^2.6.1
+  flutter_launcher_icons: ^0.14.3
+
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/logo_cropped.png"
+  adaptive_icon_background: "#ffffff" # Optional: for Android adaptive icons
+  adaptive_icon_foreground: "assets/icons/logo.png" # Optional: for Android adaptive icons
 
 flutter:
   uses-material-design: true
@@ -57,6 +64,8 @@ flutter:
     - assets/clothes/shoes/
     - assets/clothes/pants/
     - assets/carousel/
+    - assets/icons/
+
     #   - images/a_dot_ham.jpeg
     # - .env
   # An image asset can refer to one or more resolution-specific "variants", see

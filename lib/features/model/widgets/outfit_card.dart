@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modisch/core/constants/colors.dart';
-import 'package:modisch/core/database/models/outfit_model_database.dart';
-import 'package:modisch/features/model/providers/outfit_provider.dart';
+import 'package:Modisch/core/constants/colors.dart';
+import 'package:Modisch/core/database/models/outfit_model_database.dart';
+import 'package:Modisch/features/model/providers/outfit_provider.dart';
 
 class OutfitCard extends ConsumerStatefulWidget {
   final OutfitModel outfit;
@@ -181,11 +181,11 @@ class _OutfitCardState extends ConsumerState<OutfitCard> {
                 decoration: BoxDecoration(
                   color: _isHoveringOnDelete
                       ? Colors.red
-                      : AppColors.primary.withOpacity(0.9),
+                      : AppColors.primary.withValues(alpha :0.9),
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withValues(alpha :0.2),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -206,7 +206,7 @@ class _OutfitCardState extends ConsumerState<OutfitCard> {
             Positioned.fill(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha :0.1),
                   borderRadius: BorderRadius.circular(25),
                 ),
               ),

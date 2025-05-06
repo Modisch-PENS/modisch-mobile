@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:modisch/core/constants/colors.dart';
-import 'package:modisch/core/constants/typography.dart';
+import 'package:Modisch/core/constants/colors.dart';
+import 'package:Modisch/core/constants/typography.dart';
 
 class WardrobeExpandableFab extends StatelessWidget {
   const WardrobeExpandableFab({super.key});
@@ -31,7 +31,7 @@ class WardrobeExpandableFab extends StatelessWidget {
       ),
       overlayStyle: ExpandableFabOverlayStyle(
         blur: 5.0,
-        color: Colors.white.withOpacity(0.5),
+        color: Colors.white.withValues(alpha :0.5),
       ),
       children: [
         SizedBox(

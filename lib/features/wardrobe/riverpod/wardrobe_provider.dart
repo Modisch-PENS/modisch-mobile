@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:modisch/core/database/models/wardrobe_database.dart';
+import 'package:Modisch/core/database/models/wardrobe_database.dart';
 
 part 'wardrobe_provider.g.dart';
 

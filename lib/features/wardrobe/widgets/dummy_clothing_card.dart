@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:modisch/core/constants/colors.dart';
-import 'package:modisch/core/constants/typography.dart';
-import 'package:modisch/features/wardrobe/riverpod/dummy_assets_provider.dart';
+import 'package:Modisch/core/constants/colors.dart';
+import 'package:Modisch/core/constants/typography.dart';
+import 'package:Modisch/features/wardrobe/riverpod/dummy_assets_provider.dart';
 
 class DummyClothingCard extends StatelessWidget {
   final String assetPath;
@@ -45,7 +45,7 @@ class DummyClothingCard extends StatelessWidget {
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
-                          color: AppColors.disabled.withOpacity(0.2),
+                          color: AppColors.disabled.withValues(alpha :0.2),
                           child: const Center(
                             child: Icon(
                               Icons.broken_image,
@@ -64,7 +64,7 @@ class DummyClothingCard extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.8),
+                        color: AppColors.primary.withValues(alpha :0.8),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Text(

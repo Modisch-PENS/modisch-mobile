@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:modisch/core/constants/colors.dart';
-import 'package:modisch/core/constants/typography.dart';
-import 'package:modisch/core/database/models/outfit_model_database.dart';
-import 'package:modisch/features/main/riverpod/main_page_provider.dart';
-import 'package:modisch/features/model/providers/outfit_provider.dart';
-import 'package:modisch/features/model/widgets/item_category_screen.dart';
-import 'package:modisch/features/model/widgets/outfit_preview.dart';
-import 'package:modisch/features/model/widgets/top_tab_bar.dart';
+import 'package:Modisch/core/constants/colors.dart';
+import 'package:Modisch/core/constants/typography.dart';
+import 'package:Modisch/core/database/models/outfit_model_database.dart';
+import 'package:Modisch/features/main/riverpod/main_page_provider.dart';
+import 'package:Modisch/features/model/providers/outfit_provider.dart';
+import 'package:Modisch/features/model/widgets/item_category_screen.dart';
+import 'package:Modisch/features/model/widgets/outfit_preview.dart';
+import 'package:Modisch/features/model/widgets/top_tab_bar.dart';
 
 class OutfitEditorPage extends ConsumerStatefulWidget {
   final String? outfitId;

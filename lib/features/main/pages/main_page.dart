@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modisch/core/constants/colors.dart';
-import 'package:modisch/features/home/pages/homepage.dart';
-import 'package:modisch/features/main/riverpod/main_page_provider.dart';
-import 'package:modisch/features/home/widgets/home_expandable_fab.dart';
-import 'package:modisch/features/model/pages/model_page.dart';
-import 'package:modisch/features/model/widgets/model_expandable_fab.dart'; 
-import 'package:modisch/features/wardrobe/pages/wardrobe_page.dart';
-import 'package:modisch/features/wardrobe/widgets/wardrobe_expandable_fab.dart';
+import 'package:Modisch/core/constants/colors.dart';
+import 'package:Modisch/features/home/pages/homepage.dart';
+import 'package:Modisch/features/main/riverpod/main_page_provider.dart';
+import 'package:Modisch/features/home/widgets/home_expandable_fab.dart';
+import 'package:Modisch/features/model/pages/model_page.dart';
+import 'package:Modisch/features/model/widgets/model_expandable_fab.dart'; 
+import 'package:Modisch/features/wardrobe/pages/wardrobe_page.dart';
+import 'package:Modisch/features/wardrobe/widgets/wardrobe_expandable_fab.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
 class MainPage extends ConsumerStatefulWidget {

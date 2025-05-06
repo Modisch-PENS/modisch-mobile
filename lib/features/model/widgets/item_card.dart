@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:modisch/core/constants/colors.dart';
-import 'package:modisch/features/wardrobe/riverpod/dummy_assets_provider.dart';
+import 'package:Modisch/core/constants/colors.dart';
+import 'package:Modisch/features/wardrobe/riverpod/dummy_assets_provider.dart';
 
 class ItemCard extends StatelessWidget {
   final String image;
@@ -45,8 +45,8 @@ class ItemCard extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: isSelected 
-                  ? AppColors.tertiary.withOpacity(0.3) 
-                  : Colors.black.withOpacity(0.1),
+                  ? AppColors.tertiary.withValues(alpha :0.3) 
+                  : Colors.black.withValues(alpha :0.1),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -133,7 +133,7 @@ class ItemCard extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.8),
+                    color: AppColors.primary.withValues(alpha :0.8),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Text(
@@ -158,7 +158,7 @@ class ItemCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.tertiary.withOpacity(0.1) : AppColors.primary,
+          color: isSelected ? AppColors.tertiary.withValues(alpha :0.1) : AppColors.primary,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected ? AppColors.tertiary : Colors.black12,

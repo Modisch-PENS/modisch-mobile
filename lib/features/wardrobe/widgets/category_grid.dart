@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:modisch/core/database/models/wardrobe_database.dart';
+import 'package:Modisch/core/database/models/wardrobe_database.dart';
 import 'clothing_grid_item.dart';
 
 class CategoryGrid extends StatelessWidget {

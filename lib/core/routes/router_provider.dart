@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:modisch/features/main/pages/main_page.dart';
-import 'package:modisch/features/onboard/riverpod/onboard_provider.dart';
+import 'package:Modisch/features/main/pages/main_page.dart';
+import 'package:Modisch/features/onboard/riverpod/onboard_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:modisch/features/onboard/page/onboard.dart';
-import 'package:modisch/features/wardrobe/pages/crop_images_page.dart';
-import 'package:modisch/features/wardrobe/pages/confirm_clothes_page.dart';
-import 'package:modisch/features/model/pages/outfit_editor_page.dart';
+import 'package:Modisch/features/onboard/page/onboard.dart';
+import 'package:Modisch/features/wardrobe/pages/crop_images_page.dart';
+import 'package:Modisch/features/wardrobe/pages/confirm_clothes_page.dart';
+import 'package:Modisch/features/model/pages/outfit_editor_page.dart';
 import 'package:image_picker/image_picker.dart';
 
 part 'router_provider.g.dart';

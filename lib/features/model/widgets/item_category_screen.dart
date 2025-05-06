@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modisch/core/constants/colors.dart';
-import 'package:modisch/features/model/providers/outfit_provider.dart';
-import 'package:modisch/features/model/widgets/item_card.dart';
-import 'package:modisch/features/wardrobe/riverpod/dummy_assets_provider.dart';
-import 'package:modisch/features/wardrobe/riverpod/wardrobe_provider.dart';
+import 'package:Modisch/core/constants/colors.dart';
+import 'package:Modisch/features/model/providers/outfit_provider.dart';
+import 'package:Modisch/features/model/widgets/item_card.dart';
+import 'package:Modisch/features/wardrobe/riverpod/dummy_assets_provider.dart';
+import 'package:Modisch/features/wardrobe/riverpod/wardrobe_provider.dart';
 
 class ItemCategoryScreen extends ConsumerWidget {
   final String category;

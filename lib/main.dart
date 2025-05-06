@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:modisch/core/constants/colors.dart';
-import 'package:modisch/core/constants/typography.dart';
-import 'package:modisch/core/routes/router_provider.dart';
-import 'package:modisch/core/database/models/wardrobe_database.dart';
-import 'package:modisch/core/database/models/outfit_model_database.dart';
+import 'package:Modisch/core/constants/colors.dart';
+import 'package:Modisch/core/constants/typography.dart';
+import 'package:Modisch/core/routes/router_provider.dart';
+import 'package:Modisch/core/database/models/wardrobe_database.dart';
+import 'package:Modisch/core/database/models/outfit_model_database.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

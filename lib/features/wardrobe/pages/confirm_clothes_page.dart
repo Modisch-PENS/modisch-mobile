@@ -2,10 +2,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:modisch/core/constants/colors.dart';
-import 'package:modisch/core/constants/typography.dart';
-import 'package:modisch/core/database/models/wardrobe_database.dart';
-import 'package:modisch/features/wardrobe/riverpod/wardrobe_provider.dart';
+import 'package:Modisch/core/constants/colors.dart';
+import 'package:Modisch/core/constants/typography.dart';
+import 'package:Modisch/core/database/models/wardrobe_database.dart';
+import 'package:Modisch/features/wardrobe/riverpod/wardrobe_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -192,7 +192,7 @@ class _ConfirmClothesPageState extends ConsumerState<ConfirmClothesPage> {
                                 return Container(
                                   height: 280,
                                   width: double.infinity,
-                                  color: AppColors.disabled.withOpacity(0.3),
+                                  color: AppColors.disabled.withValues(alpha :0.3),
                                   child: const Icon(
                                     Icons.broken_image,
                                     size: 48,
@@ -292,7 +292,7 @@ class _ConfirmClothesPageState extends ConsumerState<ConfirmClothesPage> {
                           color: AppColors.background,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha :0.1),
                               blurRadius: 8,
                               offset: const Offset(0, -4),
                             ),
@@ -308,7 +308,7 @@ class _ConfirmClothesPageState extends ConsumerState<ConfirmClothesPage> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.tertiary,
                               disabledBackgroundColor: AppColors.disabled
-                                  .withOpacity(0.5),
+                                  .withValues(alpha :0.5),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(24),
                               ),

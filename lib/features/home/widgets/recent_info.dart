@@ -2,14 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:modisch/core/constants/colors.dart';
-import 'package:modisch/core/constants/spacing.dart';
-import 'package:modisch/core/constants/typography.dart';
-import 'package:modisch/core/database/models/wardrobe_database.dart';
-import 'package:modisch/core/database/models/outfit_model_database.dart';
-import 'package:modisch/features/main/riverpod/main_page_provider.dart';
-import 'package:modisch/features/wardrobe/riverpod/wardrobe_provider.dart';
-import 'package:modisch/features/model/providers/outfit_provider.dart';
+import 'package:Modisch/core/constants/colors.dart';
+import 'package:Modisch/core/constants/spacing.dart';
+import 'package:Modisch/core/constants/typography.dart';
+import 'package:Modisch/core/database/models/wardrobe_database.dart';
+import 'package:Modisch/core/database/models/outfit_model_database.dart';
+import 'package:Modisch/features/wardrobe/riverpod/wardrobe_provider.dart';
+import 'package:Modisch/features/model/providers/outfit_provider.dart';
 
 class RecentInfo extends ConsumerWidget {
   final String type; // 'clothes' or 'model'
@@ -244,7 +243,7 @@ class _ClothingItem extends StatelessWidget {
             border: Border.all(color: AppColors.disabled, width: 1),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha :0.05),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),
@@ -329,7 +328,7 @@ class _OutfitItem extends StatelessWidget {
             border: Border.all(color: AppColors.disabled, width: 1),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha :0.05),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),
@@ -352,7 +351,7 @@ class _OutfitItem extends StatelessWidget {
                       Icon(
                         Icons.checkroom,
                         size: 40,
-                        color: AppColors.disabled.withOpacity(0.5),
+                        color: AppColors.disabled.withValues(alpha :0.5),
                       ),
                   ],
                 ),
@@ -365,7 +364,7 @@ class _OutfitItem extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppColors.tertiary.withOpacity(0.2),
+                    color: AppColors.tertiary.withValues(alpha :0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Text(

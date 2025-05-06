@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:modisch/core/constants/colors.dart';
-import 'package:modisch/core/constants/typography.dart';
-import 'package:modisch/features/model/providers/outfit_provider.dart';
-import 'package:modisch/features/model/widgets/outfit_card.dart';
+import 'package:Modisch/core/constants/colors.dart';
+import 'package:Modisch/core/constants/typography.dart';
+import 'package:Modisch/features/model/providers/outfit_provider.dart';
+import 'package:Modisch/features/model/widgets/outfit_card.dart';
 
 class ModelPage extends ConsumerWidget {
   const ModelPage({Key? key}) : super(key: key);
