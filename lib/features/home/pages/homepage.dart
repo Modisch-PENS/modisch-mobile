@@ -24,8 +24,8 @@ class _HomePageState extends ConsumerState<HomePage> {
             children: [
               const HomepageHeader(),
               verticalSpace(24),
-              const SearchBarComponent(),
-              verticalSpace(24),
+              // const SearchBarComponent(),
+              // verticalSpace(24),
               const CarouselContainer(),
               verticalSpace(24),
               const RecentInfo(type: 'model',itemCount: 5),
