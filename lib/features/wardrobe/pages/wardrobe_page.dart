@@ -18,7 +18,7 @@ class WardrobePage extends ConsumerStatefulWidget {
 class _WardrobePageState extends ConsumerState<WardrobePage> with AutomaticKeepAliveClientMixin {
   final double boxWidth = 160;
   final double boxHeight = 184;
-  final List<String> _categories = ['Shirt', 'Pants', 'Dress', 'Shoes'];
+  final List<String> _categories = ['All', 'Shirt', 'Pants', 'Dress', 'Shoes'];
   int _currentTabIndex = 0;
 
   @override

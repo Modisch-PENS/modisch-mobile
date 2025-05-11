@@ -7,7 +7,7 @@ part of 'wardrobe_provider.dart';
 // **************************************************************************
 
 String _$clothingByCategoryHash() =>
-    r'dceff34d2a15be1cebc630c8ec918dbb5f4fb981';
+    r'27a7d80f68b487d45d7f824caa313e451dbf6256';
 
 /// Copied from Dart SDK
 class _SystemHash {
