@@ -39,7 +39,6 @@ GoRouter router(RouterRef ref) {
           return MainPage(initialTab: tabIndex);
         },
       ),
-
       // Camera picker routes
       GoRoute(
         path: '/camera_picker',

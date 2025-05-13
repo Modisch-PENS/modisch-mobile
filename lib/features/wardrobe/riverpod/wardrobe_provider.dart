@@ -84,12 +84,19 @@ class WardrobeNotifier extends _$WardrobeNotifier {
 // Filtered clothing provider
 @riverpod
 List<ClothingModel> clothingByCategory(
-  ClothingByCategoryRef ref,
-  String category,
-) {
+    ClothingByCategoryRef ref,
+    String category,
+    ) {
   final wardrobeState = ref.watch(wardrobeNotifierProvider);
   return wardrobeState.when(
-    data: (items) => items.where((item) => item.category == category).toList(),
+    data: (items) {
+      // Special case for 'All' category - return all items
+      if (category == 'All') {
+        return items;
+      }
+      // Otherwise filter by category
+      return items.where((item) => item.category == category).toList();
+    },
     loading: () => [],
     error: (_, __) => [],
   );

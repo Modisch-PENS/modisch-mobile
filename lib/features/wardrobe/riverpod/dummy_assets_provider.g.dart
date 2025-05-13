@@ -7,7 +7,7 @@ part of 'dummy_assets_provider.dart';
 // **************************************************************************
 
 String _$dummyAssetsByCategoryHash() =>
-    r'861d22d22aff4528ce27e64c7ed77c1b2c8356bf';
+    r'4fe1dbdcb4f0fd5583aeb751e045199e729969ee';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -98,5 +98,12 @@ class DummyAssetsNotifier extends _$DummyAssetsNotifier {
 @riverpod
 List<String> dummyAssetsByCategory(DummyAssetsByCategoryRef ref, String category) {
   final assetProvider = ref.watch(dummyAssetsNotifierProvider);
+
+  // Special case for 'All' category - return all assets from all categories
+  if (category == 'All') {
+    return assetProvider.values.expand((list) => list).toList();
+  }
+
+  // Otherwise return assets for the specific category
   return assetProvider[category] ?? [];
 }
